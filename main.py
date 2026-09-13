@@ -18,7 +18,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
 
 app = FastAPI(
-    title="Сервис - Спортивный Клуб",
+    title="Сервис - Helper Home",
     lifespan=lifespan,
     docs_url="/docs" if settings.ENV != "prod" else None,  # Swagger UI
     redoc_url="/redoc" if settings.ENV != "prod" else None,  # ReDoc
