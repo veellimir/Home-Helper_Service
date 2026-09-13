@@ -18,8 +18,8 @@ async def register_user(
     user_data: RegisterUserSchem,
 ) -> None:
     """
-    Регистрация нового пользователя.
-    Принимает username или email и пароль.
+    Регистрация нового пользователя \n
+    Принимает уникальный username или email, а так же пароль.
     """
     return await service.register_user(
         session=session,

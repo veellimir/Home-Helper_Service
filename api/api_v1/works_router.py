@@ -21,6 +21,8 @@ async def get_list_works(
 ) -> list[WorksListResponseSchem]:
     """
     Получает список доступных услуг
+
+    :params None
     """
     return await service.get_list_works(session=session)
 
@@ -31,6 +33,8 @@ async def get_work_by_id(
 ) -> WorkResponseSchem | None:
     """
     Получает подробную информацию по выбранной услуге
+
+    :work_id Идентификатор услуги
     """
     return await service.get_work_by_id(session=session, work_id=work_id)
 
@@ -43,6 +47,11 @@ async def create_work(
 ) -> WorkResponseSchem:
     """
     Создает услугу с уникальным названием
+
+    :title Уникальное Название услуги \n
+    :description Подробное описание услуги \n
+    :price Цена за услугу \n
+    :working_hour Время проводимых работ \n
     """
     return await service.create_work(session=session, data_work=data)
 
@@ -56,6 +65,11 @@ async def patch_work_by_id(
 ) -> WorkResponseSchem | None:
     """
     Обновляет выбранную услугу
+
+    :title Уникальное Название услуги \n
+    :description Подробное описание услуги \n
+    :price Цена за услугу \n
+    :working_hour Время проводимых работ \n
     """
     return await service.patch_work_by_id(
         session=session, work_id=work_id, data_work=data
@@ -70,5 +84,7 @@ async def delete_work_by_id(
 ) -> None:
     """
     Удаляет выбранную услугу
+
+    :work_id Идентификатор услуги
     """
     return await service.delete_work_by_id(session=session, work_id=work_id)
