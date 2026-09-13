@@ -19,6 +19,9 @@ router = APIRouter(prefix=settings.api.v1.works, tags=["Услуги работ"
 async def get_list_works(
     session: DBSessionDep, service: WorksServiceDep
 ) -> list[WorksListResponseSchem]:
+    """
+    Получает список доступных услуг
+    """
     return await service.get_list_works(session=session)
 
 
@@ -26,6 +29,9 @@ async def get_list_works(
 async def get_work_by_id(
     session: DBSessionDep, service: WorksServiceDep, work_id: int
 ) -> WorkResponseSchem | None:
+    """
+    Получает подробную информацию по выбранной услуге
+    """
     return await service.get_work_by_id(session=session, work_id=work_id)
 
 
@@ -35,6 +41,9 @@ async def create_work(
     service: WorksServiceDep,
     data: CreateWorkSchem,
 ) -> WorkResponseSchem:
+    """
+    Создает услугу с уникальным названием
+    """
     return await service.create_work(session=session, data_work=data)
 
 
@@ -45,6 +54,9 @@ async def patch_work_by_id(
     work_id: int,
     data: UpdateWorkSchem,
 ) -> WorkResponseSchem | None:
+    """
+    Обновляет выбранную услугу
+    """
     return await service.patch_work_by_id(
         session=session, work_id=work_id, data_work=data
     )
@@ -56,4 +68,7 @@ async def delete_work_by_id(
     service: WorksServiceDep,
     work_id: int,
 ) -> None:
+    """
+    Удаляет выбранную услугу
+    """
     return await service.delete_work_by_id(session=session, work_id=work_id)
