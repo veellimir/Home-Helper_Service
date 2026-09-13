@@ -19,6 +19,9 @@ router = APIRouter(prefix=settings.api.v1.users, tags=["Пользователи
 async def get_users_list(
     session: DBSessionDep, service: UsersServiceDep
 ) -> list[UsersListResponseSchem]:
+    """
+    Возвращает список пользователей
+    """
     return await service.get_users_list(session=session)
 
 
@@ -28,6 +31,9 @@ async def get_user_by_id(
     service: UsersServiceDep,
     user_id: int,
 ) -> UserResponseSchem | None:
+    """
+    Возвращает подробную информацию по текущему пользователю
+    """
     return await service.get_user_by_id(session=session, user_id=user_id)
 
 
@@ -38,6 +44,9 @@ async def create_questionnaire(
     user_id: int,
     data: CreateQuestionnaireSchem,
 ) -> UserResponseSchem | None:
+    """
+    Создает анкету для текущего пользователя
+    """
     return await service.create_questionnaire(
         session=session, user_id=user_id, data_questionnaire=data
     )
@@ -50,6 +59,9 @@ async def patch_user_with_questionnaire(
     user_id: int,
     data: UpdateUserSchem,
 ) -> UserResponseSchem | None:
+    """
+    Редактирует анкету текущего пользователя
+    """
     return await service.patch_user_by_id_with_questionnaire(
         session=session, user_id=user_id, data_questionnaire=data
     )
@@ -61,6 +73,9 @@ async def delete_user_with_questionnaire(
     service: UsersServiceDep,
     user_id: int,
 ) -> None:
+    """
+    Удаляет анкету текущего пользователя
+    """
     await service.delete_user_with_questionnaire(
         session=session, user_id=user_id
     )
