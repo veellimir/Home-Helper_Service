@@ -4,22 +4,22 @@ from core.infrastructure.schemas import BaseResponseSchem
 from core.infrastructure.typing import CustomDate
 
 
-class LessonsListResponseSchem(BaseResponseSchem):
+class WorksListResponseSchem(BaseResponseSchem):
     title: str
 
 
-class LessonResponseSchem(LessonsListResponseSchem):
+class WorkResponseSchem(WorksListResponseSchem):
     start_date: CustomDate
     end_date: CustomDate
     description: str | None = None
 
 
-class CreateLessonSchem(BaseModel):
+class CreateWorkSchem(BaseModel):
     title: str
     start_date: CustomDate
     end_date: CustomDate
     description: str | None = None
 
 
-class UpdateLessonSchem(CreateLessonSchem):
+class UpdateWorkSchem(CreateWorkSchem):
     pass
