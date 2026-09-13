@@ -1,5 +1,7 @@
 from fastapi import FastAPI, Request
 
+from app.authentication.domain.service import AuthService
+from app.authentication.infrastructure.dao import AuthDAO
 from app.users.domain.service import UsersService
 from app.users.infrastructure.dao import UsersDAO
 from app.works.domain.service import WorksService
@@ -8,16 +10,23 @@ from app.works.infrastructure.dao import WorksDAO
 
 def init_service(app: FastAPI) -> None:
     # DAO
+    auth_dao = AuthDAO()
     users_dao = UsersDAO()
     works_dao = WorksDAO()
 
     # Services
+    auth_service = AuthService(auth_dao)
     users_service = UsersService(users_dao)
     works_service = WorksService(works_dao)
 
     # State
+    app.state.auth_service = auth_service
     app.state.user_service = users_service
     app.state.works_service = works_service
+
+
+def get_auth_service(request: Request) -> AuthService:
+    return request.app.state.auth_service
 
 
 def get_users_service(request: Request) -> UsersService:

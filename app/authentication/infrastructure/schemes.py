@@ -3,7 +3,7 @@ from pydantic import EmailStr, Field
 from core.infrastructure.schemas import BaseSchem
 
 
-class RegisterSchema(BaseSchem):
+class RegisterUserSchem(BaseSchem):
     username: str | None = Field(
         default=None,
         min_length=5,
@@ -18,7 +18,7 @@ class RegisterSchema(BaseSchem):
     )
 
 
-class LoginSchema(BaseSchem):
+class LoginUserSchem(BaseSchem):
     username: str | None = Field(
         default=None,
         min_length=3,
@@ -33,15 +33,15 @@ class LoginSchema(BaseSchem):
     )
 
 
-class TokenResponseSchema(BaseSchem):
+class TokenResponseSchem(BaseSchem):
     access_token: str
     refresh_token: str
     token_type: str = "bearer"
 
 
-class RefreshSchema(BaseSchem):
+class RefreshTokenSchem(BaseSchem):
     refresh_token: str
 
 
-class LogoutSchema(BaseSchem):
+class LogoutUserSchem(BaseSchem):
     refresh_token: str

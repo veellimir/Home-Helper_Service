@@ -24,6 +24,7 @@ class DataBase(BaseSettings):
 class ApiV1Prefix(BaseModel):
     prefix: str = "/api/v1"
 
+    auth: str = "/auth"
     users: str = "/users"
     works: str = "/works"
 

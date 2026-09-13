@@ -9,6 +9,22 @@ class UserNotFoundException(HTTPException):
         )
 
 
+class UsernameEmailNotNullException(HTTPException):
+    def __init__(self) -> None:
+        super().__init__(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Введите username или ваш email",
+        )
+
+
+class UserConflictException(HTTPException):
+    def __init__(self) -> None:
+        super().__init__(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Пользователь c таким username или email уже существует",
+        )
+
+
 class QuestionnaireConflictException(HTTPException):
     def __init__(self) -> None:
         super().__init__(

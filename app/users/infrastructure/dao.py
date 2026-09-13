@@ -2,6 +2,8 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
+from app.authentication.domain.security import hash_password
+from app.authentication.infrastructure.schemes import RegisterUserSchem
 from app.users.infrastructure.models import QuestionnaireORM, UsersORM
 from app.users.infrastructure.schemes import (
     CreateQuestionnaireSchem,
@@ -33,6 +35,18 @@ class UsersDAO(SQLAlchemyBaseDAO):
         result = await session.execute(stmt)
         return result.scalar_one_or_none()
 
+    async def get_by_username(
+        self, session: AsyncSession, username: str
+    ) -> bool:
+        stmt = select(self.model).where(self.model.username == username)
+        result = await session.execute(stmt)
+        return bool(result.scalar_one_or_none())
+
+    async def get_by_email(self, session: AsyncSession, email: str) -> bool:
+        stmt = select(self.model).where(self.model.email == email)
+        result = await session.execute(stmt)
+        return bool(result.scalar_one_or_none())
+
     async def create_questionnaire(
         self,
         session: AsyncSession,
@@ -49,6 +63,18 @@ class UsersDAO(SQLAlchemyBaseDAO):
         await session.flush()
 
         return new_questionnaire
+
+    async def create_user(
+        self, session: AsyncSession, user_data: RegisterUserSchem
+    ) -> None:
+        new_user = self.model(
+            username=user_data.username,
+            email=user_data.email,
+            password_hash=hash_password(user_data.password),
+        )
+
+        session.add(new_user)
+        await session.flush()
 
     async def patch_user_by_id_with_questionnaire(
         self,

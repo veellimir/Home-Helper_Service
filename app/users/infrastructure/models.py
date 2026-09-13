@@ -35,6 +35,10 @@ class UsersORM(BaseORM):
     )
     role: Mapped[str] = mapped_column(String(25), default=UserRole.USER)
 
+    refresh_tokens: Mapped[list["RefreshTokenORM"]] = relationship(
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )
     questionnaire: Mapped["QuestionnaireORM | None"] = relationship(
         back_populates="user",
         uselist=False,
