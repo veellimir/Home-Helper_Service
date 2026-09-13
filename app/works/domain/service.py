@@ -2,7 +2,10 @@ from typing import Any
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.works.domain.exceptions import WorkNotFoundException
+from app.works.domain.exceptions import (
+    WorkConflictException,
+    WorkNotFoundException,
+)
 from app.works.infrastructure.dao import WorksDAO
 from app.works.infrastructure.models import WorksORM
 from app.works.infrastructure.schemes import (
@@ -43,6 +46,12 @@ class WorksService(SQLAlchemyBaseService[WorksORM]):
         session: AsyncSession,
         data_work: CreateWorkSchem,
     ) -> WorkResponseSchem:
+        current_work: WorksORM | None = await self.dao.get_work_by_title(
+            session=session, title=data_work.title
+        )
+        if current_work:
+            raise WorkConflictException
+
         new_work: WorksORM = await self.dao.create_work(
             session=session, data_work=data_work
         )
@@ -63,12 +72,12 @@ class WorksService(SQLAlchemyBaseService[WorksORM]):
         update_work: dict[str, Any] = {
             "title": data_work.title,
             "description": data_work.description,
-            "start_date": data_work.start_date,
-            "end_date": data_work.end_date,
+            "price": data_work.price,
+            "working_hour": data_work.working_hour,
         }
 
         result: WorksORM = await self.dao.patch_work_by_id(
-            session=session, work=current_work, data_lesson=update_work
+            session=session, work=current_work, data_work=update_work
         )
         return WorkResponseSchem.model_validate(result)
 
@@ -77,4 +86,10 @@ class WorksService(SQLAlchemyBaseService[WorksORM]):
         session: AsyncSession,
         work_id: int,
     ) -> None:
-        pass
+        current_work: WorksORM | None = await self.dao.get_object_by_id(
+            session=session, obj_id=work_id
+        )
+        if not current_work:
+            raise WorkNotFoundException
+
+        await self.dao.delete_work(session=session, current_work=current_work)

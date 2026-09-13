@@ -1,7 +1,6 @@
 from pydantic import BaseModel
 
 from core.infrastructure.schemas import BaseResponseSchem
-from core.infrastructure.typing import CustomDate
 
 
 class WorksListResponseSchem(BaseResponseSchem):
@@ -9,16 +8,16 @@ class WorksListResponseSchem(BaseResponseSchem):
 
 
 class WorkResponseSchem(WorksListResponseSchem):
-    start_date: CustomDate
-    end_date: CustomDate
-    description: str | None = None
+    price: int
+    description: str
+    working_hour: int
 
 
 class CreateWorkSchem(BaseModel):
     title: str
-    start_date: CustomDate
-    end_date: CustomDate
-    description: str | None = None
+    description: str
+    price: int
+    working_hour: int
 
 
 class UpdateWorkSchem(CreateWorkSchem):

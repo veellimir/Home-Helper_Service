@@ -29,7 +29,7 @@ async def get_work_by_id(
     return await service.get_work_by_id(session=session, work_id=work_id)
 
 
-@router.post("/create", summary="Создание услугу")
+@router.post("/create", summary="Создание услуги")
 async def create_work(
     session: DBSessionDep,
     service: WorksServiceDep,
@@ -46,7 +46,7 @@ async def patch_work_by_id(
     data: UpdateWorkSchem,
 ) -> WorkResponseSchem | None:
     return await service.patch_work_by_id(
-        session=session, work_id_id=work_id, data_work=data
+        session=session, work_id=work_id, data_work=data
     )
 
 

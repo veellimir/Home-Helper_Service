@@ -7,3 +7,11 @@ class WorkNotFoundException(HTTPException):
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Услуга не найдена",
         )
+
+
+class WorkConflictException(HTTPException):
+    def __init__(self) -> None:
+        super().__init__(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Услуга уже существует",
+        )

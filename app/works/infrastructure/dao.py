@@ -1,5 +1,6 @@
 from typing import Any
 
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.works.infrastructure.models import WorksORM
@@ -12,6 +13,13 @@ class WorksDAO(SQLAlchemyBaseDAO):
         self.model = WorksORM
         super().__init__(WorksORM)
 
+    async def get_work_by_title(
+        self, session: AsyncSession, title: str
+    ) -> WorksORM | None:
+        stmt = select(self.model).where(self.model.title == title)
+        result = await session.execute(stmt)
+        return result.scalar_one_or_none()
+
     async def create_work(
         self,
         session: AsyncSession,
@@ -20,8 +28,8 @@ class WorksDAO(SQLAlchemyBaseDAO):
         new_work = self.model(
             title=data_work.title,
             description=data_work.description,
-            start_date=data_work.start_date,
-            end_date=data_work.end_date,
+            price=data_work.price,
+            working_hour=data_work.working_hour,
         )
 
         session.add(new_work)
@@ -40,3 +48,9 @@ class WorksDAO(SQLAlchemyBaseDAO):
 
         await session.flush()
         return work
+
+    async def delete_work(
+        self, session: AsyncSession, current_work: WorksORM
+    ) -> None:
+        await session.delete(current_work)
+        await session.flush()
