@@ -32,6 +32,13 @@ class ApiPrefix(BaseModel):
     v1: ApiV1Prefix = ApiV1Prefix()
 
 
+class AuthConfig(BaseSettings):
+    JWT_SECRET_KEY: str
+    JWT_ALGORITHM: str
+    ACCESS_TOKEN_EXPIRE_MINUTES: int
+    REFRESH_TOKEN_EXPIRE_DAYS: int
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=env_file,
@@ -40,9 +47,11 @@ class Settings(BaseSettings):
         extra="allow",
     )
 
+    # Configs
     run: RunConfig = RunConfig()
     db: DataBase
     api: ApiPrefix = ApiPrefix()
+    auth: AuthConfig
 
     ENV: str = env
 
