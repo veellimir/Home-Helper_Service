@@ -1,4 +1,4 @@
-from pydantic import EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field
 
 from core.infrastructure.schemas import BaseSchem
 
@@ -33,6 +33,10 @@ class LoginUserSchem(BaseSchem):
     )
 
 
+class LogoutUserSchem(BaseSchem):
+    refresh_token: str
+
+
 class TokenResponseSchem(BaseSchem):
     access_token: str
     refresh_token: str
@@ -43,5 +47,10 @@ class RefreshTokenSchem(BaseSchem):
     refresh_token: str
 
 
-class LogoutUserSchem(BaseSchem):
+class RefreshTokenRequestSchem(BaseModel):
     refresh_token: str
+
+
+class AccessTokenResponseSchem(BaseModel):
+    access_token: str
+    token_type: str = "bearer"

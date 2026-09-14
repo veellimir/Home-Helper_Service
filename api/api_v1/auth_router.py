@@ -1,7 +1,9 @@
 from fastapi import APIRouter, status
 
 from app.authentication.infrastructure.schemes import (
+    AccessTokenResponseSchem,
     LoginUserSchem,
+    RefreshTokenRequestSchem,
     RegisterUserSchem,
     TokenResponseSchem,
 )
@@ -44,3 +46,21 @@ async def login_user(
     Авторизация пользователя по username или email.
     """
     return await service.login_user(session=session, user_data=user_data)
+
+
+@router.post("/refresh", summary="Обновить access токен")
+async def refresh(
+    session: DBSessionDep,
+    service: AuthServiceDep,
+    data: RefreshTokenRequestSchem,
+) -> AccessTokenResponseSchem:
+    """
+    Обновление access токена по refresh.
+
+    :refresh_token Принимает \n
+    -> access_token
+    """
+    return await service.refresh_access_token(
+        session=session,
+        refresh_token=data.refresh_token,
+    )

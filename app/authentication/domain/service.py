@@ -1,7 +1,10 @@
+from datetime import UTC, datetime
+
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.authentication.infrastructure.dao import AuthDAO
 from app.authentication.infrastructure.schemes import (
+    AccessTokenResponseSchem,
     LoginUserSchem,
     RegisterUserSchem,
     TokenResponseSchem,
@@ -102,5 +105,34 @@ class AuthService(SQLAlchemyBaseService[UsersORM]):
         return TokenResponseSchem(
             access_token=access_token,
             refresh_token=refresh_token,
+            token_type="bearer",
+        )
+
+    async def refresh_access_token(
+        self,
+        session: AsyncSession,
+        refresh_token: str,
+    ) -> AccessTokenResponseSchem:
+        refresh_token_hash = hash_refresh_token(
+            refresh_token,
+        )
+
+        stored_refresh_token = await self.dao.get_refresh_token(
+            session=session,
+            token_hash=refresh_token_hash,
+        )
+
+        if stored_refresh_token is None:
+            raise UserInvalidCredentialsException
+
+        if stored_refresh_token.expires_at <= datetime.now(UTC):
+            raise UserInvalidCredentialsException
+
+        access_token = create_access_token(
+            user_id=stored_refresh_token.user_id,
+        )
+
+        return AccessTokenResponseSchem(
+            access_token=access_token,
             token_type="bearer",
         )
