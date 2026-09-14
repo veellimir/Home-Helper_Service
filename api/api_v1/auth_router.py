@@ -68,7 +68,7 @@ async def refresh(
 
 
 @router.post(
-    "/logout", summary="Выйти из аккаунта", response_model=status.HTTP_200_OK
+    "/logout", summary="Выйти из аккаунта", status_code=status.HTTP_200_OK
 )
 async def logout_user(
     session: DBSessionDep,
