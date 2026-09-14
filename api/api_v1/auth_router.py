@@ -1,6 +1,10 @@
 from fastapi import APIRouter, status
 
-from app.authentication.infrastructure.schemes import RegisterUserSchem
+from app.authentication.infrastructure.schemes import (
+    LoginUserSchem,
+    RegisterUserSchem,
+    TokenResponseSchem,
+)
 from core.config import settings
 from dependecies.annotations import AuthServiceDep, DBSessionDep
 
@@ -25,3 +29,18 @@ async def register_user(
         session=session,
         user_data=user_data,
     )
+
+
+@router.post(
+    "/login",
+    summary="Получить токен пользователя",
+)
+async def login_user(
+    session: DBSessionDep,
+    service: AuthServiceDep,
+    user_data: LoginUserSchem,
+) -> TokenResponseSchem:
+    """
+    Авторизация пользователя по username или email.
+    """
+    return await service.login_user(session=session, user_data=user_data)

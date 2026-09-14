@@ -2,8 +2,8 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
-from app.authentication.domain.security import hash_password
 from app.authentication.infrastructure.schemes import RegisterUserSchem
+from app.authentication.infrastructure.security import hash_password
 from app.users.infrastructure.models import QuestionnaireORM, UsersORM
 from app.users.infrastructure.schemes import (
     CreateQuestionnaireSchem,
@@ -37,15 +37,17 @@ class UsersDAO(SQLAlchemyBaseDAO):
 
     async def get_by_username(
         self, session: AsyncSession, username: str
-    ) -> bool:
+    ) -> UsersORM | None:
         stmt = select(self.model).where(self.model.username == username)
         result = await session.execute(stmt)
-        return bool(result.scalar_one_or_none())
+        return result.scalar_one_or_none()
 
-    async def get_by_email(self, session: AsyncSession, email: str) -> bool:
+    async def get_by_email(
+        self, session: AsyncSession, email: str
+    ) -> UsersORM | None:
         stmt = select(self.model).where(self.model.email == email)
         result = await session.execute(stmt)
-        return bool(result.scalar_one_or_none())
+        return result.scalar_one_or_none()
 
     async def create_questionnaire(
         self,

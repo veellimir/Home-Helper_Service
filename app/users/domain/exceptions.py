@@ -17,11 +17,27 @@ class UsernameEmailNotNullException(HTTPException):
         )
 
 
+class UserInputDataConflictException(HTTPException):
+    def __init__(self) -> None:
+        super().__init__(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Необходимо указать либо username или email",
+        )
+
+
 class UserConflictException(HTTPException):
     def __init__(self) -> None:
         super().__init__(
             status_code=status.HTTP_409_CONFLICT,
             detail="Пользователь c таким username или email уже существует",
+        )
+
+
+class UserInvalidCredentialsException(HTTPException):
+    def __init__(self) -> None:
+        super().__init__(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Введены неверные данные, повторите попытку",
         )
 
 
