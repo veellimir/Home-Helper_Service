@@ -36,7 +36,7 @@ class AuthDAO(SQLAlchemyBaseDAO):
     ) -> RefreshTokenORM | None:
         stmt = select(RefreshTokenORM).where(
             RefreshTokenORM.token_hash == token_hash,
-            RefreshTokenORM.revoked_at.is_(None),
+            RefreshTokenORM.revoker_at.is_(None),
         )
         result = await session.execute(stmt)
         return result.scalar_one_or_none()
@@ -46,5 +46,5 @@ class AuthDAO(SQLAlchemyBaseDAO):
         session: AsyncSession,
         refresh_token: RefreshTokenORM,
     ) -> None:
-        refresh_token.revoked_at = datetime.now(UTC)
+        refresh_token.revoker_at = datetime.now(UTC)
         await session.flush()

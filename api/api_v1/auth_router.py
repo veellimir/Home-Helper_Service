@@ -3,6 +3,7 @@ from fastapi import APIRouter, status
 from app.authentication.infrastructure.schemes import (
     AccessTokenResponseSchem,
     LoginUserSchem,
+    LogoutRequestSchem,
     RefreshTokenRequestSchem,
     RegisterUserSchem,
     TokenResponseSchem,
@@ -61,6 +62,23 @@ async def refresh(
     -> access_token
     """
     return await service.refresh_access_token(
+        session=session,
+        refresh_token=data.refresh_token,
+    )
+
+
+@router.post(
+    "/logout", summary="Выйти из аккаунта", response_model=status.HTTP_200_OK
+)
+async def logout_user(
+    session: DBSessionDep,
+    service: AuthServiceDep,
+    data: LogoutRequestSchem,
+) -> None:
+    """
+    Выйти из аккаунта и деактивировать токен пользователя.
+    """
+    await service.logout_user(
         session=session,
         refresh_token=data.refresh_token,
     )

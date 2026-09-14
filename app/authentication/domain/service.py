@@ -23,7 +23,7 @@ from app.users.domain.exceptions import (
     UsernameEmailNotNullException,
 )
 from app.users.infrastructure.dao import UsersDAO
-from app.users.infrastructure.models import UsersORM
+from app.users.infrastructure.models import RefreshTokenORM, UsersORM
 from core.domain.service import SQLAlchemyBaseService
 
 
@@ -108,16 +108,42 @@ class AuthService(SQLAlchemyBaseService[UsersORM]):
             token_type="bearer",
         )
 
+    async def logout_user(
+        self,
+        session: AsyncSession,
+        refresh_token: str,
+    ) -> None:
+        refresh_token_hash: str = hash_refresh_token(
+            refresh_token,
+        )
+
+        stored_refresh_token: (
+            RefreshTokenORM | None
+        ) = await self.dao.get_refresh_token(
+            session=session,
+            token_hash=refresh_token_hash,
+        )
+
+        if stored_refresh_token is None:
+            return
+
+        await self.dao.revoke_refresh_token(
+            session=session,
+            refresh_token=stored_refresh_token,
+        )
+
     async def refresh_access_token(
         self,
         session: AsyncSession,
         refresh_token: str,
     ) -> AccessTokenResponseSchem:
-        refresh_token_hash = hash_refresh_token(
+        refresh_token_hash: str = hash_refresh_token(
             refresh_token,
         )
 
-        stored_refresh_token = await self.dao.get_refresh_token(
+        stored_refresh_token: (
+            RefreshTokenORM | None
+        ) = await self.dao.get_refresh_token(
             session=session,
             token_hash=refresh_token_hash,
         )
@@ -128,7 +154,7 @@ class AuthService(SQLAlchemyBaseService[UsersORM]):
         if stored_refresh_token.expires_at <= datetime.now(UTC):
             raise UserInvalidCredentialsException
 
-        access_token = create_access_token(
+        access_token: str = create_access_token(
             user_id=stored_refresh_token.user_id,
         )
 
