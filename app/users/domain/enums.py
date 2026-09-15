@@ -2,6 +2,6 @@ from enum import StrEnum, unique
 
 
 @unique
-class UserRole(StrEnum):
+class UserRoleEnum(StrEnum):
     CLIENT = "client"
     ADMIN = "admin"

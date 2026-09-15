@@ -1,9 +1,10 @@
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
 from app.authentication.infrastructure.schemes import RegisterUserSchem
 from app.authentication.infrastructure.security import hash_password
+from app.users.domain.enums import UserRoleEnum
 from app.users.infrastructure.models import QuestionnaireORM, UsersORM
 from app.users.infrastructure.schemes import (
     CreateQuestionnaireSchem,
@@ -77,6 +78,19 @@ class UsersDAO(SQLAlchemyBaseDAO):
 
         session.add(new_user)
         await session.flush()
+
+    async def patch_role_user_by_id(
+        self, session: AsyncSession, user_id: int, update_role: UserRoleEnum
+    ) -> UsersORM:
+        stmt = (
+            update(self.model)
+            .where(self.model.id == user_id)
+            .values(role=update_role)
+            .returning(self.model)
+        )
+
+        result = await session.execute(stmt)
+        return result.scalar()
 
     async def patch_user_by_id_with_questionnaire(
         self,

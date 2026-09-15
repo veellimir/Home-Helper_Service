@@ -7,7 +7,7 @@ from sqlalchemy.orm import (
     relationship,
 )
 
-from app.users.domain.enums import UserRole
+from app.users.domain.enums import UserRoleEnum
 from core.infrastructure.models import BaseORM
 
 
@@ -33,7 +33,7 @@ class UsersORM(BaseORM):
         String(255),
         nullable=False,
     )
-    role: Mapped[str] = mapped_column(String(25), default=UserRole.CLIENT)
+    role: Mapped[str] = mapped_column(String(25), default=UserRoleEnum.CLIENT)
 
     refresh_tokens: Mapped[list["RefreshTokenORM"]] = relationship(
         back_populates="user",

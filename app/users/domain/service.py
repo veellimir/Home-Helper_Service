@@ -2,6 +2,7 @@ from typing import Any
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.users.domain.enums import UserRoleEnum
 from app.users.domain.exceptions import (
     QuestionnaireConflictException,
     UserNotFoundException,
@@ -12,6 +13,7 @@ from app.users.infrastructure.schemes import (
     CreateQuestionnaireSchem,
     UpdateUserSchem,
     UserResponseSchem,
+    UserRoleSchem,
     UsersListResponseSchem,
 )
 from core.domain.service import SQLAlchemyBaseService
@@ -63,6 +65,16 @@ class UsersService(SQLAlchemyBaseService[UsersORM]):
         current_user.questionnaire = new_questionnaire
 
         return UserResponseSchem.model_validate(current_user)
+
+    async def patch_role_user_by_id(
+        self, session: AsyncSession, user_id: int, update_role: UserRoleEnum
+    ) -> UserRoleSchem:
+        await self.get_user_by_id(session=session, user_id=user_id)
+
+        new_role: UsersORM = await self.dao.patch_role_user_by_id(
+            session=session, user_id=user_id, update_role=update_role
+        )
+        return UserRoleSchem.model_validate(new_role)
 
     async def patch_user_by_id_with_questionnaire(
         self,

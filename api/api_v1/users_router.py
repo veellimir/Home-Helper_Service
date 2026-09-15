@@ -4,6 +4,7 @@ from app.users.infrastructure.schemes import (
     CreateQuestionnaireSchem,
     UpdateUserSchem,
     UserResponseSchem,
+    UserRoleSchem,
     UsersListResponseSchem,
 )
 from core.config import settings
@@ -64,19 +65,21 @@ async def create_questionnaire(
 @router.patch(
     "/update-role/{user_id}", summary="Изменить роль пользователю по ID"
 )
-async def patch_role_user(
+async def patch_role_user_by_id(
     session: DBSessionDep,
     service: UsersServiceDep,
     user_id: int,
-) -> None:
+    data_role: UserRoleSchem,
+) -> UserRoleSchem:
     """
-    МАРШРУТ В РАЗРАБОТКЕ !\n
     Редактирует роль пользователя
 
     :user_id Идентификатор текущего пользователя \n
     :return: str Обновлённая роль
     """
-    pass
+    return await service.patch_role_user_by_id(
+        session=session, user_id=user_id, update_role=data_role.role
+    )
 
 
 @router.patch("/{user_id}", summary="Обновление анкеты")

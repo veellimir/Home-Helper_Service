@@ -1,5 +1,6 @@
 from pydantic import Field, computed_field
 
+from app.users.domain.enums import UserRoleEnum
 from core.infrastructure.schemas import (
     BaseResponseSchem,
     BaseSchem,
@@ -18,6 +19,7 @@ class UsersListResponseSchem(BaseResponseSchem):
 
 class UserResponseSchem(BaseResponseSchem):
     username: str
+    role: UserRoleEnum
     questionnaire: QuestionnaireResponseSchem | None = Field(
         default=None, exclude=True
     )
@@ -41,3 +43,7 @@ class CreateQuestionnaireSchem(QuestionnaireResponseSchem):
 
 class UpdateUserSchem(QuestionnaireResponseSchem):
     username: str
+
+
+class UserRoleSchem(BaseSchem):
+    role: UserRoleEnum
