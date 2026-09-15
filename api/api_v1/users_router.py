@@ -61,6 +61,24 @@ async def create_questionnaire(
     )
 
 
+@router.patch(
+    "/update-role/{user_id}", summary="Изменить роль пользователю по ID"
+)
+async def patch_role_user(
+    session: DBSessionDep,
+    service: UsersServiceDep,
+    user_id: int,
+) -> None:
+    """
+    МАРШРУТ В РАЗРАБОТКЕ !\n
+    Редактирует роль пользователя
+
+    :user_id Идентификатор текущего пользователя \n
+    :return: str Обновлённая роль
+    """
+    pass
+
+
 @router.patch("/{user_id}", summary="Обновление анкеты")
 async def patch_user_with_questionnaire(
     session: DBSessionDep,
