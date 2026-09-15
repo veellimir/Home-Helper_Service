@@ -33,7 +33,7 @@ class UsersORM(BaseORM):
         String(255),
         nullable=False,
     )
-    role: Mapped[str] = mapped_column(String(25), default=UserRole.USER)
+    role: Mapped[str] = mapped_column(String(25), default=UserRole.CLIENT)
 
     refresh_tokens: Mapped[list["RefreshTokenORM"]] = relationship(
         back_populates="user",

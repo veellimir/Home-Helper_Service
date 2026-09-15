@@ -3,6 +3,5 @@ from enum import StrEnum, unique
 
 @unique
 class UserRole(StrEnum):
-    USER = "user"
+    CLIENT = "client"
     ADMIN = "admin"
-    DEVELOPER = "developer"
