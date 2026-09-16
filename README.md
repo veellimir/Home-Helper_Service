@@ -6,6 +6,10 @@
 
     DB__DATABASE_URL=
     DB__ECHO_LOG=
+    AUTH__JWT_SECRET_KEY=
+    AUTH__JWT_ALGORITHM=
+    AUTH__ACCESS_TOKEN_EXPIRE_MINUTES=
+    AUTH__REFRESH_TOKEN_EXPIRE_DAYS=
 
 ### 2.Docker start
 #### start from build
