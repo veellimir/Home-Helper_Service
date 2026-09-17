@@ -42,3 +42,11 @@
     price: Цена
     working_hour: Примерное время работ 
     
+<hr>
+
+### WorkBookingORM
+
+    questionnaire_id: Ссылка на анкету пользователя
+    work_id: Ссылка на доступную услугу
+    start_at: Время записи пользователя
+    
