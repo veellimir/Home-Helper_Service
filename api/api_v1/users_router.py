@@ -13,7 +13,7 @@ from dependecies.annotations import (
     UsersServiceDep,
 )
 
-router = APIRouter(prefix=settings.api.v1.users, tags=["Пользователи"])
+router = APIRouter(prefix=settings.api.v1.users, tags=["Users"])
 
 
 @router.get("/list", summary="Получить список пользователей")

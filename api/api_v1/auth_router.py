@@ -11,7 +11,7 @@ from app.authentication.infrastructure.schemes import (
 from core.config import settings
 from dependecies.annotations import AuthServiceDep, DBSessionDep
 
-router = APIRouter(prefix=settings.api.v1.auth, tags=["Аутентификация"])
+router = APIRouter(prefix=settings.api.v1.auth, tags=["Authenticated"])
 
 
 @router.post(

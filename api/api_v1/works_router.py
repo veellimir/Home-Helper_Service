@@ -12,7 +12,7 @@ from dependecies.annotations import (
     WorksServiceDep,
 )
 
-router = APIRouter(prefix=settings.api.v1.works, tags=["Услуги работ"])
+router = APIRouter(prefix=settings.api.v1.works, tags=["Services"])
 
 
 @router.get("/list", summary="Получить список услуг")
