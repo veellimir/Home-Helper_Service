@@ -2,7 +2,7 @@
 
 ### The project documentation is stored in the folder "docs".
 
-### 1.Create file .env-dev
+### 1.Create file .env.dev
 
     DB__DATABASE_URL=
     DB__ECHO_LOG=
