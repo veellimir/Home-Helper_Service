@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from sqlalchemy import CheckConstraint, DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import (
@@ -8,8 +9,10 @@ from sqlalchemy.orm import (
 )
 
 from app.users.domain.enums import UserRoleEnum
-from app.works.infrastructure.models import WorkBookingsORM
 from core.infrastructure.models import BaseORM
+
+if TYPE_CHECKING:
+    from app.works.infrastructure.models import WorkBookingsORM
 
 
 class UsersORM(BaseORM):

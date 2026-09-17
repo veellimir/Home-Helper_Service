@@ -7,7 +7,10 @@ from app.users.infrastructure.models import (  # noqa: F401
     QuestionnaireORM,
     UsersORM,
 )
-from app.works.infrastructure.models import WorksORM  # noqa: F401
+from app.works.infrastructure.models import (  # noqa: F401
+    WorkBookingsORM,
+    WorksORM,
+)
 from core.config import settings
 from core.infrastructure.models import BaseORM
 
