@@ -18,6 +18,7 @@ router = APIRouter(prefix=settings.api.v1.auth, tags=["Authenticated"])
     "/register",
     summary="Регистрация пользователя",
     status_code=status.HTTP_201_CREATED,
+    operation_id="register_user",
 )
 async def register_user(
     session: DBSessionDep,
@@ -35,8 +36,7 @@ async def register_user(
 
 
 @router.post(
-    "/login",
-    summary="Получить токен пользователя",
+    "/login", summary="Получить токен пользователя", operation_id="login_user"
 )
 async def login_user(
     session: DBSessionDep,
@@ -49,7 +49,9 @@ async def login_user(
     return await service.login_user(session=session, user_data=user_data)
 
 
-@router.post("/refresh", summary="Обновить access токен")
+@router.post(
+    "/refresh", summary="Обновить access токен", operation_id="refresh_token"
+)
 async def refresh(
     session: DBSessionDep,
     service: AuthServiceDep,
@@ -68,7 +70,10 @@ async def refresh(
 
 
 @router.post(
-    "/logout", summary="Выйти из аккаунта", status_code=status.HTTP_200_OK
+    "/logout",
+    summary="Выйти из аккаунта",
+    status_code=status.HTTP_200_OK,
+    operation_id="logout_user",
 )
 async def logout_user(
     session: DBSessionDep,
