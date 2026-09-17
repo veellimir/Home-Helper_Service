@@ -8,6 +8,7 @@ from sqlalchemy.orm import (
 )
 
 from app.users.domain.enums import UserRoleEnum
+from app.works.infrastructure.models import WorkBookingsORM
 from core.infrastructure.models import BaseORM
 
 
@@ -81,4 +82,8 @@ class QuestionnaireORM(BaseORM):
     )
     user: Mapped["UsersORM"] = relationship(
         back_populates="questionnaire",
+    )
+    work_bookings: Mapped[list["WorkBookingsORM"]] = relationship(
+        back_populates="questionnaire",
+        cascade="all, delete-orphan",
     )
