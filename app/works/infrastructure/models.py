@@ -13,3 +13,5 @@ class WorksORM(BaseORM):
     description: Mapped[str] = mapped_column(Text, nullable=False)
     price: Mapped[int] = mapped_column(Integer, nullable=False)
     working_hour: Mapped[int] = mapped_column(Integer, nullable=False)
+
+    # TODO: Добавить время записи и пользователя который вызвал мастера.
