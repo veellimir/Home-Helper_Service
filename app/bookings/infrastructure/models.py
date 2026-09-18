@@ -26,6 +26,7 @@ class WorkBookingsORM(BaseORM):
     )
 
     start_at: Mapped[INPUT_USER_DATE]
+    end_at: Mapped[INPUT_USER_DATE]
 
     questionnaire: Mapped["QuestionnaireORM"] = relationship(
         back_populates="work_bookings"
