@@ -21,7 +21,11 @@ def init_service(app: FastAPI) -> None:
     auth_service = AuthService(auth_dao)
     users_service = UsersService(users_dao)
     works_service = WorksService(works_dao)
-    work_booking_service = WorksService(work_booking_dao)
+    work_booking_service = WorkBookingService(
+        dao=work_booking_dao,
+        works_dao=works_dao,
+        users_dao=users_dao
+    )
 
     # State
     app.state.auth_service = auth_service

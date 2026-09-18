@@ -3,9 +3,9 @@ from fastapi import APIRouter
 from core.config import settings
 
 from .auth_router import router as a_router
+from .bookings_router import router as b_router
 from .users_router import router as u_router
 from .works_router import router as w_router
-from .bookings_router import router as b_router
 
 router = APIRouter(prefix=settings.api.v1.prefix)
 

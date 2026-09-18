@@ -1,4 +1,4 @@
-from sqlalchemy import  Integer, String, Text
+from sqlalchemy import Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.bookings.infrastructure.models import WorkBookingsORM
@@ -18,6 +18,3 @@ class WorksORM(BaseORM):
     bookings: Mapped[list["WorkBookingsORM"]] = relationship(
         back_populates="work"
     )
-
-
-

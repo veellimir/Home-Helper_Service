@@ -8,8 +8,6 @@ from app.users.infrastructure.models import (  # noqa: F401
     UsersORM,
 )
 from app.works.infrastructure.models import WorksORM  # noqa: F401
-from app.bookings.infrastructure.models import WorkBookingsORM
-
 from core.config import settings
 from core.infrastructure.models import BaseORM
 
