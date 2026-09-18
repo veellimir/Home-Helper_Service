@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, UTC
 from typing import Annotated
 
 from pydantic import PlainSerializer
@@ -8,21 +8,25 @@ from sqlalchemy.orm import mapped_column
 
 # NOTE: From models
 def utc_now() -> datetime:
-    return datetime.now().astimezone().replace(tzinfo=None)
+    return datetime.now(UTC).replace(tzinfo=None)
 
 
 CREATED_AT = Annotated[
     datetime,
     mapped_column(
-        server_default=text("TIMEZONE('utc', 'now')"),
+        DateTime,
+        default=utc_now,
+        nullable=False,
     ),
 ]
 
 UPDATE_AT = Annotated[
     datetime,
     mapped_column(
-        server_default=text("TIMEZONE('utc', 'now')"),
+        DateTime,
+        default=utc_now,
         onupdate=utc_now,
+        nullable=False,
     ),
 ]
 
