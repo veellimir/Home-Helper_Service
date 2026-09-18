@@ -47,3 +47,14 @@ class QuestionnaireConflictException(HTTPException):
             status_code=status.HTTP_409_CONFLICT,
             detail="Анкета уже существует",
         )
+
+
+class QuestionnaireNotFoundException(HTTPException):
+    def __init__(self) -> None:
+        super().__init__(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=(
+                "Анкета пользователя не существует, "
+                "пожалуйста заполните профиль."
+            ),
+        )

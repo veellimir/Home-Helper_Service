@@ -18,7 +18,7 @@ class UsersListResponseSchem(BaseResponseSchem):
 
 
 class UserResponseSchem(BaseResponseSchem):
-    username: str
+    username: str | None = None
     role: UserRoleEnum
     questionnaire: QuestionnaireResponseSchem | None = Field(
         default=None, exclude=True

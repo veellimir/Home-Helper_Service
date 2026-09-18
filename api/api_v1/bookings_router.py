@@ -8,7 +8,7 @@ router = APIRouter(prefix=settings.api.v1.bookings, tags=["Booking Services"])
 
 
 @router.get("/list", summary="Получить все вызовы мастера по времени")
-async def get_list_work_bookings():
+async def get_list_work_bookings() -> None:
     """
     Получает список вызовов матера для каждого пользователя.
 
@@ -22,7 +22,7 @@ async def create_work_booking(
     session: DBSessionDep,
     service: WorkBookingServiceDep,
     data: CreateWorkBookingSchem,
-):
+) -> None:
     """
     Создает вызов мастера по свободной дате и времени и выбранной работы.
 
@@ -30,4 +30,6 @@ async def create_work_booking(
     :work_id Уникальный идентификатор выбранной работы \n
     :input_time Желаемое время заказчика (дд.мм.гггг)
     """
-    return service.create_work_booking(session=session, boooking_data=data)
+    return await service.create_work_booking(
+        session=session, booking_data=data
+    )

@@ -3,6 +3,6 @@ from core.infrastructure.typing import INPUT_USER_DATE
 
 
 class CreateWorkBookingSchem(BaseSchem):
-    questionnaire_id: int
+    user_id: int
     work_id: int
     input_time: INPUT_USER_DATE
