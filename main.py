@@ -24,7 +24,7 @@ app = FastAPI(
     docs_url="/docs" if settings.ENV != "prod" else None,  # Swagger UI
     redoc_url="/redoc" if settings.ENV != "prod" else None,  # ReDoc
     openapi_url="/openapi.json" if settings.ENV != "prod" else None,
-    default_response_class=ORJSONResponse if settings.ENV != "prod" else None,
+    default_response_class=ORJSONResponse,
 )
 
 app.add_middleware(CORSMiddleware, **asdict(settings.cors))

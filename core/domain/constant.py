@@ -8,3 +8,5 @@ base_env = dotenv_values(BASE_DIR / ".env")
 env = base_env.get("ENV", "dev")
 
 env_file = BASE_DIR / f".env.{env}"
+
+WORKS_IMG: str = "works_img"

@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, File, UploadFile
+from fastapi import APIRouter, File, UploadFile, Form
 
 from app.works.infrastructure.schemes import (
     CreateWorkSchem,
@@ -45,7 +45,10 @@ async def get_work_by_id(
 async def create_work(
     session: DBSessionDep,
     service: WorksServiceDep,
-    data: CreateWorkSchem,
+    title: Annotated[str, Form()],
+    description: Annotated[str, Form()],
+    price: Annotated[int, Form()],
+    working_hour: Annotated[int, Form()],
     image: Annotated[UploadFile | None, File()] = None,
 ) -> WorkResponseSchem:
     """
@@ -57,7 +60,12 @@ async def create_work(
     :working_hour Время проводимых работ \n
     """
     return await service.create_work(
-        session=session, data_work=data, image=image
+        session=session,
+        title=title,
+        description=description,
+        price=price,
+        working_hour=working_hour,
+        image=image,
     )
 
 

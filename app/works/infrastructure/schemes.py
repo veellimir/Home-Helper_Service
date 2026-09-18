@@ -11,6 +11,7 @@ class WorkResponseSchem(WorksListResponseSchem):
     price: int
     description: str
     working_hour: int
+    image_url: str | None = None
 
 
 class CreateWorkSchem(BaseModel):

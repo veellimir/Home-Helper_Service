@@ -1,8 +1,8 @@
 from pathlib import Path
-from typing import Any
+from typing import Any, Annotated
 from uuid import uuid4
 
-from fastapi import UploadFile
+from fastapi import UploadFile, Form, File
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.works.domain.exceptions import (
@@ -17,13 +17,15 @@ from app.works.infrastructure.schemes import (
     WorkResponseSchem,
     WorksListResponseSchem,
 )
+from core.config import settings
+from core.domain.constant import WORKS_IMG
 from core.domain.service import SQLAlchemyBaseService
 
 
 class Utils:
     @staticmethod
-    def save_image_from_work(image: UploadFile) -> str:
-        directory = Path("media/works_img")
+    async def save_image_from_work(image: UploadFile) -> str:
+        directory = settings.MEDIA_ROOT / WORKS_IMG
         directory.mkdir(parents=True, exist_ok=True)
 
         extension = Path(image.filename or "").suffix.lower()
@@ -31,10 +33,10 @@ class Utils:
 
         file_path = directory / filename
 
-        content = image.read()
+        content = await image.read()
         file_path.write_bytes(content)
 
-        return f"/media/works_img/{filename}"
+        return f"/media/{WORKS_IMG}/{filename}"
 
 
 class WorksService(SQLAlchemyBaseService[WorksORM]):
@@ -65,18 +67,28 @@ class WorksService(SQLAlchemyBaseService[WorksORM]):
     async def create_work(
         self,
         session: AsyncSession,
-        data_work: CreateWorkSchem,
-        image: UploadFile | None,
+        title: Annotated[str, Form()],
+        description: Annotated[str, Form()],
+        price: Annotated[int, Form()],
+        working_hour: Annotated[int, Form()],
+        image: Annotated[UploadFile | None, File()] = None,
     ) -> WorkResponseSchem:
         current_work: WorksORM | None = await self.dao.get_work_by_title(
-            session=session, title=data_work.title
+            session=session, title=title
         )
         if current_work:
             raise WorkConflictException
 
+        data_work = CreateWorkSchem(
+            title=title,
+            description=description,
+            price=price,
+            working_hour=working_hour,
+        )
+
         image_url: str | None = None
         if image:
-            image_url: str = self.utils.save_image_from_work(image=image)
+            image_url: str =await self.utils.save_image_from_work(image=image)
 
         new_work: WorksORM = await self.dao.create_work(
             session=session, data_work=data_work, image_url=image_url
