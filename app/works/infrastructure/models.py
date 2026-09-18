@@ -14,6 +14,10 @@ class WorksORM(BaseORM):
     description: Mapped[str] = mapped_column(Text, nullable=False)
     price: Mapped[int] = mapped_column(Integer, nullable=False)
     working_hour: Mapped[int] = mapped_column(Integer, nullable=False)
+    image_url: Mapped[str] = mapped_column(
+        String(500),
+        nullable=True
+    )
 
     bookings: Mapped[list["WorkBookingsORM"]] = relationship(
         back_populates="work"
