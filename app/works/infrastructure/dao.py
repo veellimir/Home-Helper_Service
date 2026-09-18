@@ -24,12 +24,14 @@ class WorksDAO(SQLAlchemyBaseDAO):
         self,
         session: AsyncSession,
         data_work: CreateWorkSchem,
+        image_url: str | None = None,
     ) -> WorksORM:
         new_work = self.model(
             title=data_work.title,
             description=data_work.description,
             price=data_work.price,
             working_hour=data_work.working_hour,
+            image_url=image_url,
         )
 
         session.add(new_work)

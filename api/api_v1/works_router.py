@@ -1,4 +1,6 @@
-from fastapi import APIRouter
+from typing import Annotated
+
+from fastapi import APIRouter, File, UploadFile
 
 from app.works.infrastructure.schemes import (
     CreateWorkSchem,
@@ -44,6 +46,7 @@ async def create_work(
     session: DBSessionDep,
     service: WorksServiceDep,
     data: CreateWorkSchem,
+    image: Annotated[UploadFile | None, File()] = None,
 ) -> WorkResponseSchem:
     """
     Создает услугу с уникальным названием
@@ -53,7 +56,9 @@ async def create_work(
     :price Цена за услугу \n
     :working_hour Время проводимых работ \n
     """
-    return await service.create_work(session=session, data_work=data)
+    return await service.create_work(
+        session=session, data_work=data, image=image
+    )
 
 
 @router.patch("/{work_id}", summary="Обновить услугу по ID")

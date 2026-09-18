@@ -1,5 +1,8 @@
+from pathlib import Path
 from typing import Any
+from uuid import uuid4
 
+from fastapi import UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.works.domain.exceptions import (
@@ -17,9 +20,27 @@ from app.works.infrastructure.schemes import (
 from core.domain.service import SQLAlchemyBaseService
 
 
+class Utils:
+    @staticmethod
+    def save_image_from_work(image: UploadFile) -> str:
+        directory = Path("media/works_img")
+        directory.mkdir(parents=True, exist_ok=True)
+
+        extension = Path(image.filename or "").suffix.lower()
+        filename = f"{uuid4()}{extension}"
+
+        file_path = directory / filename
+
+        content = image.read()
+        file_path.write_bytes(content)
+
+        return f"/media/works_img/{filename}"
+
+
 class WorksService(SQLAlchemyBaseService[WorksORM]):
     def __init__(self, dao: WorksDAO) -> None:
         self.dao = dao
+        self.utils = Utils()
         super().__init__(self.dao)
 
     async def get_list_works(
@@ -45,6 +66,7 @@ class WorksService(SQLAlchemyBaseService[WorksORM]):
         self,
         session: AsyncSession,
         data_work: CreateWorkSchem,
+        image: UploadFile | None,
     ) -> WorkResponseSchem:
         current_work: WorksORM | None = await self.dao.get_work_by_title(
             session=session, title=data_work.title
@@ -52,8 +74,12 @@ class WorksService(SQLAlchemyBaseService[WorksORM]):
         if current_work:
             raise WorkConflictException
 
+        image_url: str | None = None
+        if image:
+            image_url: str = self.utils.save_image_from_work(image=image)
+
         new_work: WorksORM = await self.dao.create_work(
-            session=session, data_work=data_work
+            session=session, data_work=data_work, image_url=image_url
         )
         return WorkResponseSchem.model_validate(new_work)
 
