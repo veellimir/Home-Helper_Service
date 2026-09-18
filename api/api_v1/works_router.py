@@ -1,10 +1,8 @@
 from typing import Annotated
 
-from fastapi import APIRouter, File, UploadFile, Form
+from fastapi import APIRouter, File, Form, UploadFile
 
 from app.works.infrastructure.schemes import (
-    CreateWorkSchem,
-    UpdateWorkSchem,
     WorkResponseSchem,
     WorksListResponseSchem,
 )
@@ -74,7 +72,11 @@ async def patch_work_by_id(
     session: DBSessionDep,
     service: WorksServiceDep,
     work_id: int,
-    data: UpdateWorkSchem,
+    title: Annotated[str, Form()],
+    description: Annotated[str, Form()],
+    price: Annotated[int, Form()],
+    working_hour: Annotated[int, Form()],
+    image: Annotated[UploadFile | None, File()] = None,
 ) -> WorkResponseSchem | None:
     """
     Обновляет выбранную услугу
@@ -85,7 +87,13 @@ async def patch_work_by_id(
     :working_hour Время проводимых работ \n
     """
     return await service.patch_work_by_id(
-        session=session, work_id=work_id, data_work=data
+        session=session,
+        work_id=work_id,
+        title=title,
+        description=description,
+        price=price,
+        working_hour=working_hour,
+        image=image,
     )
 
 

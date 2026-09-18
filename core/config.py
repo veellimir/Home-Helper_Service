@@ -1,5 +1,3 @@
-from pathlib import Path
-
 from pydantic import BaseModel
 from pydantic_settings import (
     BaseSettings,
@@ -58,7 +56,6 @@ class Settings(BaseSettings):
     auth: AuthConfig
 
     ENV: str = env
-    MEDIA_ROOT: Path = Path("/app/media")
 
     @property
     def cors(self) -> CORSSettings:

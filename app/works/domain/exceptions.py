@@ -13,5 +13,5 @@ class WorkConflictException(HTTPException):
     def __init__(self) -> None:
         super().__init__(
             status_code=status.HTTP_409_CONFLICT,
-            detail="Услуга уже существует",
+            detail="Услуга с таким названием уже существует",
         )

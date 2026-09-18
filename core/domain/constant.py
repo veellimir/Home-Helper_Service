@@ -9,4 +9,5 @@ env = base_env.get("ENV", "dev")
 
 env_file = BASE_DIR / f".env.{env}"
 
+MEDIA_ROOT: pathlib.Path = pathlib.Path("/app/media")
 WORKS_IMG: str = "works_img"
