@@ -24,6 +24,15 @@ class WorkBookingDAO(SQLAlchemyBaseDAO):
         result = await session.execute(stmt)
         return result.scalars().all()
 
+    async def get_list_work_bookings(
+        self,
+        session: AsyncSession,
+    ) -> WorkBookingsORM:
+        stmt = select(self.model).order_by(self.model.start_at)
+
+        result = await session.execute(stmt)
+        return result.scalars().all()
+
     async def create_booking(
         self,
         session: AsyncSession,
