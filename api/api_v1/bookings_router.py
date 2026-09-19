@@ -1,6 +1,9 @@
 from fastapi import APIRouter
 
-from app.bookings.infrastructure.schemes import CreateWorkBookingSchem
+from app.bookings.infrastructure.schemes import (
+    CreateWorkBookingSchem,
+    WorkBookingResponseSchem,
+)
 from core.config import settings
 from dependecies.annotations import DBSessionDep, WorkBookingServiceDep
 
@@ -22,13 +25,13 @@ async def create_work_booking(
     session: DBSessionDep,
     service: WorkBookingServiceDep,
     data: CreateWorkBookingSchem,
-) -> None:
+) -> WorkBookingResponseSchem:
     """
     Создает вызов мастера по свободной дате и времени и выбранной работы.
 
     :questionnaire_id Уникальное идентификатор профиля пользователя \n
     :work_id Уникальный идентификатор выбранной работы \n
-    :input_time Желаемое время заказчика (дд.мм.гггг)
+    :input_time Желаемое время заказчика (формат: 2026-09-20T16:00:00)
     """
     return await service.create_work_booking(
         session=session, booking_data=data

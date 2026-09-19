@@ -7,7 +7,7 @@ from core.infrastructure.schemas import (
 )
 
 
-class QuestionnaireResponseSchem(BaseSchem):
+class QuestionnaireResponseSchem(BaseResponseSchem):
     first_name: str
     last_name: str
     age: int | None = None

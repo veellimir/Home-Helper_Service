@@ -16,12 +16,10 @@ class WorkBookingsORM(BaseORM):
 
     questionnaire_id: Mapped[int] = mapped_column(
         ForeignKey("questionnaires.id", ondelete="CASCADE"),
-        unique=True,
         nullable=False,
     )
     work_id: Mapped[int] = mapped_column(
         ForeignKey("works.id", ondelete="CASCADE"),
-        unique=True,
         nullable=False,
     )
 
