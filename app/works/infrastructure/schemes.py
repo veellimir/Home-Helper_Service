@@ -8,6 +8,11 @@ class WorksListResponseSchem(BaseResponseSchem):
     image_url: str | None = None
 
 
+class WorksPaginationResponseSchem(BaseModel):
+    items: list[WorksListResponseSchem]
+    next_cursor: int | None
+
+
 class WorkResponseSchem(WorksListResponseSchem):
     price: int
     description: str

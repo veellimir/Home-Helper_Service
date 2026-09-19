@@ -13,8 +13,10 @@ from app.works.infrastructure.dao import WorksDAO
 from app.works.infrastructure.models import WorksORM
 from app.works.infrastructure.schemes import (
     CreateWorkSchem,
+    UpdateWorkSchem,
     WorkResponseSchem,
-    WorksListResponseSchem, UpdateWorkSchem,
+    WorksListResponseSchem,
+    WorksPaginationResponseSchem,
 )
 from core.domain.constant import MEDIA_ROOT, WORKS_IMG
 from core.domain.service import SQLAlchemyBaseService
@@ -43,13 +45,31 @@ class WorksService(SQLAlchemyBaseService[WorksORM]):
         self.utils = Utils()
         super().__init__(self.dao)
 
-    async def get_list_works(
-        self, session: AsyncSession
-    ) -> list[WorksListResponseSchem]:
-        works: list[WorksORM] = await self.dao.get_list_objects(
-            session=session
+    async def get_list_works_with_filters(
+        self,
+        session: AsyncSession,
+        limit: int,
+        cursor: int | None = None,
+    ) -> tuple[WorksPaginationResponseSchem, int]:
+        works: list[WorksORM] = await self.dao.get_list_objects_with_filters(
+            session=session, limit=limit, cursor=cursor
         )
-        return [WorksListResponseSchem.model_validate(work) for work in works]
+        has_next = len(works) > limit
+        if has_next:
+            works = works[:limit]
+
+        items = [
+            WorksListResponseSchem.model_validate(work) for work in works
+        ]
+        next_cursor: int = items[-1].id if has_next else None
+
+        total: int = await self.dao.get_count_works(
+            session=session,
+        )
+
+        return WorksPaginationResponseSchem(
+            items=items, next_cursor=next_cursor
+        ), total
 
     async def get_work_by_id(
         self, session: AsyncSession, work_id: int

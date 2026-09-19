@@ -1,12 +1,13 @@
 from typing import Annotated
 
-from fastapi import APIRouter, File, Form, UploadFile
+from fastapi import APIRouter, File, Form, Response, UploadFile
 
 from app.works.infrastructure.schemes import (
     WorkResponseSchem,
-    WorksListResponseSchem,
+    WorksPaginationResponseSchem,
 )
 from core.config import settings
+from core.infrastructure.typing import PAGINATION_FIELD
 from dependecies.annotations import (
     DBSessionDep,
     WorksServiceDep,
@@ -17,14 +18,24 @@ router = APIRouter(prefix=settings.api.v1.works, tags=["Services"])
 
 @router.get("/list", summary="Получить список услуг")
 async def get_list_works(
-    session: DBSessionDep, service: WorksServiceDep
-) -> list[WorksListResponseSchem]:
+    session: DBSessionDep,
+    service: WorksServiceDep,
+    response: Response,
+    limit: int = PAGINATION_FIELD,
+    cursor: int | None = None,
+) -> WorksPaginationResponseSchem:
     """
     Получает список доступных услуг
 
-    :params None
+    :limit Максимальный лимит загрузки за один раз (default=20) \n
+    :cursor Точка с которой продолжить загрузку
     """
-    return await service.get_list_works(session=session)
+    result, total = await service.get_list_works_with_filters(
+        session=session, limit=limit, cursor=cursor
+    )
+    response.headers["X-Total-Count"] = str(total)
+
+    return result
 
 
 @router.get("/{work_id}", summary="Получить услугу по ID")

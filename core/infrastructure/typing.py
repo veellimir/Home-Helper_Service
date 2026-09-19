@@ -1,8 +1,9 @@
-from datetime import datetime, UTC
+from datetime import UTC, datetime
 from typing import Annotated
 
+from fastapi import Query
 from pydantic import PlainSerializer
-from sqlalchemy import DateTime, text
+from sqlalchemy import DateTime
 from sqlalchemy.orm import mapped_column
 
 
@@ -50,3 +51,5 @@ CustomDate = Annotated[
         return_type=str,
     ),
 ]
+
+PAGINATION_FIELD: int = Query(default=20, ge=1, le=100)
