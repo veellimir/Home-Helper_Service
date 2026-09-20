@@ -10,6 +10,7 @@ from app.users.infrastructure.models import (  # noqa: F401
 from app.works.infrastructure.models import WorksORM  # noqa: F401
 from core.config import settings
 from core.infrastructure.models import BaseORM
+from  app.authentication.infrastructure.models import RefreshTokenORM, PasswordResetTokenORM  # noqa: F401
 
 config = context.config
 
