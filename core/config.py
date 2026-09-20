@@ -41,6 +41,17 @@ class AuthConfig(BaseSettings):
     REFRESH_TOKEN_EXPIRE_DAYS: int
 
 
+class YandexConfig(BaseSettings):
+    SMTP_HOST: str
+    SMTP_PORT: int
+    SMTP_USER: str
+    SMTP_PASSWORD: str
+    SMTP_FROM: str
+
+    FRONTEND_URL: str
+    PASSWORD_RESET_EXPIRE_MINUTES: int
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=env_file,
@@ -54,6 +65,7 @@ class Settings(BaseSettings):
     db: DataBase
     api: ApiPrefix = ApiPrefix()
     auth: AuthConfig
+    yandex: YandexConfig
 
     ENV: str = env
 
