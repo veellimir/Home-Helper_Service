@@ -8,6 +8,10 @@ from fastapi.responses import ORJSONResponse
 from starlette.middleware.cors import CORSMiddleware
 
 from api.api_v1 import router as api_v1_router
+from app.authentication.dependencies.register_access import (
+    register_access_rules,
+)
+from app.authentication.dependencies.rules import ACCESS_RULES
 from core.config import settings
 from dependecies.functions import init_service
 
@@ -29,6 +33,11 @@ app = FastAPI(
 
 app.add_middleware(CORSMiddleware, **asdict(settings.cors))
 app.include_router(api_v1_router)
+register_access_rules(
+    routes=app.routes,
+    access_rules=ACCESS_RULES,
+)
+
 
 if __name__ == "__main__":
     uvicorn.run(

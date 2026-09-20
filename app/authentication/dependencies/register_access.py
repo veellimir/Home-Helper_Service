@@ -9,11 +9,6 @@ from app.authentication.dependencies.authorization import require_role
 from app.users.domain.enums import UserRoleEnum
 
 
-ACCESS_RULES: dict[tuple[str, str], UserRoleEnum] = {
-    ("GET", "/api/v1/users/list"): UserRoleEnum.ADMIN,
-}
-
-
 def register_access_rules(
     routes: Iterable[Any],
     access_rules: dict[tuple[str, str], UserRoleEnum],
@@ -22,13 +17,11 @@ def register_access_rules(
 
     for context in iter_route_contexts(routes):
         route = context.route
-
         if not isinstance(route, APIRoute):
             continue
 
         for method in context.methods or set():
             key = (method, context.path)
-
             if key not in access_rules:
                 continue
 
@@ -42,27 +35,18 @@ def register_access_rules(
             )
 
             effective_route = context._effective_route
-
             effective_route.dependant.dependencies.append(
                 dependant,
             )
 
             registered_rules.add(key)
 
-            print(
-                f"ACCESS: {method} {context.path} "
-                f"-> {required_role.value}",
-                flush=True,
-            )
-
     missing_rules = set(access_rules) - registered_rules
 
     if missing_rules:
         missing = ", ".join(
-            f"{method} {path}"
-            for method, path in sorted(missing_rules)
+            f"{method} {path}" for method, path in sorted(missing_rules)
         )
-
         raise RuntimeError(
             f"Для следующих маршрутов не найден endpoint: {missing}",
         )

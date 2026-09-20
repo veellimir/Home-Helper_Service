@@ -57,7 +57,7 @@ class AccessTokenResponseSchem(BaseModel):
 
 
 class LogoutRequestSchem(RefreshTokenRequestSchem):
-    pass
+    access_token: str
 
 
 class ForgotPasswordSchem(BaseSchem):

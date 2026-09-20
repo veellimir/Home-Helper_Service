@@ -18,7 +18,8 @@ router = APIRouter(prefix=settings.api.v1.users, tags=["Users"])
 
 @router.get("/list", summary="Получить список пользователей")
 async def get_users_list(
-    session: DBSessionDep, service: UsersServiceDep
+    session: DBSessionDep,
+    service: UsersServiceDep,
 ) -> list[UsersListResponseSchem]:
     """
     Возвращает список пользователей

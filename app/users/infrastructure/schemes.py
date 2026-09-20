@@ -1,4 +1,4 @@
-from pydantic import Field, computed_field
+from pydantic import EmailStr, Field, computed_field
 
 from app.users.domain.enums import UserRoleEnum
 from core.infrastructure.schemas import (
@@ -14,11 +14,12 @@ class QuestionnaireResponseSchem(BaseResponseSchem):
 
 
 class UsersListResponseSchem(BaseResponseSchem):
-    username: str
+    username: str | None = None
 
 
 class UserResponseSchem(BaseResponseSchem):
     username: str | None = None
+    email: EmailStr | None = None
     role: UserRoleEnum
     questionnaire: QuestionnaireResponseSchem | None = Field(
         default=None, exclude=True

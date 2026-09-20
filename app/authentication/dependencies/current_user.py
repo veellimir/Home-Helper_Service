@@ -1,17 +1,13 @@
-from typing import Annotated, Callable, Any
+from typing import Annotated
 
 from fastapi import Depends
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
-from app.authentication.domain.enums import Permission
-from app.authentication.domain.exceptions import UnauthorizedNotFoundException
-from app.authentication.domain.permissions import ROLE_PERMISSIONS
 from app.authentication.infrastructure.security import TokenService
 from app.users.domain.exceptions import UserNotFoundException
 from app.users.infrastructure.dao import UsersDAO
 from app.users.infrastructure.schemes import UserResponseSchem
 from dependecies.annotations import DBSessionDep
-
 
 bearer_scheme = HTTPBearer()
 
