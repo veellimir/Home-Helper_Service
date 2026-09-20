@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
 from app.authentication.infrastructure.schemes import RegisterUserSchem
-from app.authentication.infrastructure.security import hash_password
+from app.authentication.infrastructure.security import PasswordService
 from app.users.domain.enums import UserRoleEnum
 from app.users.infrastructure.models import QuestionnaireORM, UsersORM
 from app.users.infrastructure.schemes import (
@@ -68,12 +68,15 @@ class UsersDAO(SQLAlchemyBaseDAO):
         return new_questionnaire
 
     async def create_user(
-        self, session: AsyncSession, user_data: RegisterUserSchem
+        self,
+        session: AsyncSession,
+        password_service: PasswordService,
+        user_data: RegisterUserSchem,
     ) -> None:
         new_user = self.model(
             username=user_data.username,
             email=user_data.email,
-            password_hash=hash_password(user_data.password),
+            password_hash=password_service.hash_password(user_data.password),
         )
 
         session.add(new_user)

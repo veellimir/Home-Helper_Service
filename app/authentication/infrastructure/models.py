@@ -5,7 +5,6 @@ from sqlalchemy import DateTime, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from core.infrastructure.models import BaseORM
-from core.infrastructure.typing import CREATED_AT
 
 if TYPE_CHECKING:
     from app.users.infrastructure.models import UsersORM
@@ -36,19 +35,10 @@ class PasswordResetTokenORM(BaseORM):
     __tablename__ = "password_reset_tokens"
 
     user_id: Mapped[int] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE"),
-        nullable=False
+        ForeignKey("users.id", ondelete="CASCADE"), nullable=False
     )
     token_hash: Mapped[str] = mapped_column(
-        String(64),
-        unique=True,
-        nullable=False
+        String(64), unique=True, nullable=False
     )
-    expires_at: Mapped[CREATED_AT] = mapped_column(
-        DateTime,
-        nullable=False
-    )
-    used_at: Mapped[CREATED_AT | None] = mapped_column(
-        DateTime,
-        nullable=False
-    )
+    expires_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    used_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)

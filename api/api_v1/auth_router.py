@@ -2,10 +2,12 @@ from fastapi import APIRouter, status
 
 from app.authentication.infrastructure.schemes import (
     AccessTokenResponseSchem,
+    ForgotPasswordSchem,
     LoginUserSchem,
     LogoutRequestSchem,
     RefreshTokenRequestSchem,
     RegisterUserSchem,
+    ResetPasswordSchem,
     TokenResponseSchem,
 )
 from core.config import settings
@@ -66,6 +68,22 @@ async def refresh(
     return await service.refresh_access_token(
         session=session,
         refresh_token=data.refresh_token,
+    )
+
+
+@router.post("/forgot-password", summary="Запрос на восстановление пароля")
+async def forgot_password(
+    session: DBSessionDep, service: AuthServiceDep, data: ForgotPasswordSchem
+) -> None:
+    await service.forgot_password(session=session, email=data.email)
+
+
+@router.post("/reset-password", summary="Сброс пароля")
+async def reset_password(
+    session: DBSessionDep, service: AuthServiceDep, data: ResetPasswordSchem
+) -> None:
+    await service.reset_password(
+        session=session, token=data.token, new_password=data.new_password
     )
 
 

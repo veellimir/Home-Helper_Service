@@ -3,6 +3,10 @@ from logging.config import fileConfig
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 
+from app.authentication.infrastructure.models import (
+    PasswordResetTokenORM,  # noqa: F401
+    RefreshTokenORM,  # noqa: F401
+)
 from app.users.infrastructure.models import (  # noqa: F401
     QuestionnaireORM,
     UsersORM,
@@ -10,7 +14,6 @@ from app.users.infrastructure.models import (  # noqa: F401
 from app.works.infrastructure.models import WorksORM  # noqa: F401
 from core.config import settings
 from core.infrastructure.models import BaseORM
-from  app.authentication.infrastructure.models import RefreshTokenORM, PasswordResetTokenORM  # noqa: F401
 
 config = context.config
 

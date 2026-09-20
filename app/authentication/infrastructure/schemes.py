@@ -58,3 +58,12 @@ class AccessTokenResponseSchem(BaseModel):
 
 class LogoutRequestSchem(RefreshTokenRequestSchem):
     pass
+
+
+class ForgotPasswordSchem(BaseSchem):
+    email: EmailStr
+
+
+class ResetPasswordSchem(BaseSchem):
+    token: str
+    new_password: str
