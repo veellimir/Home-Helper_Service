@@ -43,17 +43,17 @@ class TokenResponseSchem(BaseSchem):
     token_type: str = "bearer"
 
 
+class AccessTokenResponseSchem(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+
+
 class RefreshTokenSchem(BaseSchem):
     refresh_token: str
 
 
 class RefreshTokenRequestSchem(BaseModel):
     refresh_token: str
-
-
-class AccessTokenResponseSchem(BaseModel):
-    access_token: str
-    token_type: str = "bearer"
 
 
 class LogoutRequestSchem(RefreshTokenRequestSchem):

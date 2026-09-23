@@ -20,7 +20,7 @@ class UsersListResponseSchem(BaseResponseSchem):
 class UserResponseSchem(BaseResponseSchem):
     username: str | None = None
     email: EmailStr | None = None
-    role: UserRoleEnum
+    role: str = Field(exclude=True)
     questionnaire: QuestionnaireResponseSchem | None = Field(
         default=None, exclude=True
     )
@@ -38,12 +38,17 @@ class UserResponseSchem(BaseResponseSchem):
         return self.questionnaire.age if self.questionnaire else None
 
 
-class CreateQuestionnaireSchem(QuestionnaireResponseSchem):
-    pass
+class CreateQuestionnaireSchem(BaseSchem):
+    first_name: str
+    last_name: str
+    age: int | None = None
 
 
-class UpdateUserSchem(QuestionnaireResponseSchem):
-    username: str
+class UpdateUserSchem(BaseSchem):
+    first_name: str
+    last_name: str
+    username: str | None = None
+    age: int | None = None
 
 
 class UserRoleSchem(BaseSchem):

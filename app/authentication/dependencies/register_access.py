@@ -7,6 +7,7 @@ from fastapi.routing import APIRoute, iter_route_contexts
 
 from app.authentication.dependencies.authorization import require_role
 from app.users.domain.enums import UserRoleEnum
+from core.config import settings
 
 
 def register_access_rules(
@@ -38,6 +39,10 @@ def register_access_rules(
             effective_route.dependant.dependencies.append(
                 dependant,
             )
+
+            effective_route.openapi_extra = {
+                "security": [{"HTTPBearer": []}],
+            }
 
             registered_rules.add(key)
 

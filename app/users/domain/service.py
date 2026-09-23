@@ -39,6 +39,8 @@ class UsersService(SQLAlchemyBaseService[UsersORM]):
         ) = await self.dao.get_user_by_id(session=session, user_id=user_id)
         if not current_user:
             raise UserNotFoundException
+        if current_user.id != user_id:
+            raise UserNotFoundException
 
         return UserResponseSchem.model_validate(current_user)
 
@@ -54,6 +56,8 @@ class UsersService(SQLAlchemyBaseService[UsersORM]):
 
         if current_user.questionnaire:
             raise QuestionnaireConflictException
+        if current_user.id != user_id:
+            raise UserNotFoundException
 
         new_questionnaire: QuestionnaireORM = (
             await self.dao.create_questionnaire(
