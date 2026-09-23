@@ -1,6 +1,7 @@
 from app.authentication.domain.enums import AccessLevel
 from app.users.domain.enums import UserRoleEnum
 
+# ОПИСАНИЯ ПРАВИЛ ДЛЯ МАРШРУТОВ
 ACCESS_RULES: dict[tuple[str, str], UserRoleEnum | AccessLevel] = {
     # AUTH
     ("POST", "/api/v1/auth/refresh"): AccessLevel.AUTHENTICATED,
@@ -17,6 +18,10 @@ ACCESS_RULES: dict[tuple[str, str], UserRoleEnum | AccessLevel] = {
     ("DELETE", "/api/v1/users/{user_id}"): AccessLevel.AUTHENTICATED,
 
     # SERVICE
+    ("PATCH", "/api/v1/works/{work_id}"): UserRoleEnum.ADMIN,
+    ("DELETE", "/api/v1/works/{work_id}"): UserRoleEnum.ADMIN,
+    ("POST", "/api/v1/works/crete"): UserRoleEnum.ADMIN,
 
     # BOOKING SERVICE
+    ("POST", "/api/v1/work-booking/crete"): UserRoleEnum.CLIENT,
 }
