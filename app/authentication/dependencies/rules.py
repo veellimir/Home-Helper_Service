@@ -3,6 +3,9 @@ from app.users.domain.enums import UserRoleEnum
 
 ACCESS_RULES: dict[tuple[str, str], UserRoleEnum | AccessLevel] = {
     # AUTH
+    ("POST", "/api/v1/auth/refresh"): AccessLevel.AUTHENTICATED,
+    ("POST", "/api/v1/auth/forgot-password"): AccessLevel.AUTHENTICATED,
+    ("POST", "/api/v1/auth/reset-password"): AccessLevel.AUTHENTICATED,
     ("POST", "/api/v1/auth/logout"): AccessLevel.AUTHENTICATED,
 
     # USERS
