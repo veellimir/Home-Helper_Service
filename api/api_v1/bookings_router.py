@@ -3,8 +3,9 @@ from fastapi import APIRouter
 from app.authentication.dependencies.current_user import CurrentUserDep
 from app.bookings.infrastructure.schemes import (
     CreateWorkBookingSchem,
+    WorkBookingDetailListShem,
     WorkBookingListShem,
-    WorkBookingResponseSchem, WorkBookingDetailListShem,
+    WorkBookingResponseSchem,
 )
 from core.config import settings
 from dependecies.annotations import DBSessionDep, WorkBookingServiceDep
@@ -26,7 +27,7 @@ async def get_list_work_bookings(
 
 
 @router.get("/list-detail", summary="Получить вызовы пользователей")
-async def get_list_work_bookings(
+async def get_list_detail_work_bookings(
     session: DBSessionDep,
     service: WorkBookingServiceDep,
 ) -> list[WorkBookingDetailListShem]:

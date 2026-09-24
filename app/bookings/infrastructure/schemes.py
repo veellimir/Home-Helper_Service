@@ -1,6 +1,8 @@
 from pydantic import computed_field
 
-from app.users.infrastructure.schemes import UserResponseSchem, QuestionnaireResponseSchem
+from app.users.infrastructure.schemes import (
+    QuestionnaireResponseSchem,
+)
 from core.infrastructure.schemas import BaseResponseSchem, BaseSchem
 from core.infrastructure.typing import CustomDate
 

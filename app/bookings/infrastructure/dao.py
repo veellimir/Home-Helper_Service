@@ -1,12 +1,10 @@
 from datetime import datetime
-from typing import Sequence
 
 from sqlalchemy import and_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
 from app.bookings.infrastructure.models import WorkBookingsORM
-from app.users.infrastructure.models import UsersORM
 from core.infrastructure.dao import SQLAlchemyBaseDAO
 
 
@@ -36,16 +34,13 @@ class WorkBookingDAO(SQLAlchemyBaseDAO):
         result = await session.execute(stmt)
         return result.scalars().all()
 
-
     async def get_list_detail_work_bookings(
         self,
         session: AsyncSession,
     ) -> list[WorkBookingsORM]:
         stmt = (
             select(self.model)
-            .options(
-                joinedload(self.model.questionnaire)
-            )
+            .options(joinedload(self.model.questionnaire))
             .order_by(self.model.start_at)
         )
 

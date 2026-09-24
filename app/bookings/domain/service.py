@@ -10,8 +10,9 @@ from app.bookings.infrastructure.dao import WorkBookingDAO
 from app.bookings.infrastructure.models import WorkBookingsORM
 from app.bookings.infrastructure.schemes import (
     CreateWorkBookingSchem,
+    WorkBookingDetailListShem,
     WorkBookingListShem,
-    WorkBookingResponseSchem, WorkBookingDetailListShem,
+    WorkBookingResponseSchem,
 )
 from app.users.domain.exceptions import QuestionnaireNotFoundException
 from app.users.domain.service import UsersService
@@ -50,8 +51,8 @@ class WorkBookingService(SQLAlchemyBaseService[WorkBookingsORM]):
         self,
         session: AsyncSession,
     ) -> list[WorkBookingDetailListShem]:
-        bookings: WorkBookingService = await self.dao.get_list_detail_work_bookings(
-            session=session
+        bookings: WorkBookingService = (
+            await self.dao.get_list_detail_work_bookings(session=session)
         )
 
         return [
