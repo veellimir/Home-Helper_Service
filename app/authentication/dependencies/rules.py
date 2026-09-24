@@ -10,12 +10,12 @@ ACCESS_RULES: dict[tuple[str, str], UserRoleEnum | AccessLevel] = {
     ("POST", "/api/v1/auth/logout"): AccessLevel.AUTHENTICATED,
 
     # USERS
-    ("GET", "/api/v1/users/{user_id}"): AccessLevel.AUTHENTICATED,
     ("GET", "/api/v1/users/list"): UserRoleEnum.ADMIN,
-    ("POST", "/api/v1/users/{user_id}"): UserRoleEnum.CLIENT,
-    ("PATCH", "/api/v1/users/{user_id}"): UserRoleEnum.CLIENT,
+    ("GET", "/api/v1/users/current-user"): AccessLevel.AUTHENTICATED,
+    ("POST", "/api/v1/users/create"): UserRoleEnum.CLIENT,
+    ("PATCH", "/api/v1/users/update"): UserRoleEnum.CLIENT,
     ("PATCH", "/api/v1/users/update-role/{user_id}"): UserRoleEnum.ADMIN,
-    ("DELETE", "/api/v1/users/{user_id}"): AccessLevel.AUTHENTICATED,
+    ("DELETE", "/api/v1/users/delete"): AccessLevel.AUTHENTICATED,
 
     # SERVICE
     ("PATCH", "/api/v1/works/{work_id}"): UserRoleEnum.ADMIN,

@@ -47,7 +47,7 @@ class WorkBookingService(SQLAlchemyBaseService[WorkBookingsORM]):
         ]
 
     async def create_work_booking(
-        self, session: AsyncSession, booking_data: CreateWorkBookingSchem
+        self, session: AsyncSession, booking_data: CreateWorkBookingSchem, user_id: int
     ) -> None:
         current_work: (
             WorkResponseSchem | None
@@ -57,7 +57,7 @@ class WorkBookingService(SQLAlchemyBaseService[WorkBookingsORM]):
         current_user: (
             UserResponseSchem | None
         ) = await self.users_service.get_user_by_id(
-            session=session, user_id=booking_data.user_id
+            session=session, user_id=user_id
         )
         if not current_user.questionnaire:
             raise QuestionnaireNotFoundException
@@ -87,6 +87,9 @@ class WorkBookingService(SQLAlchemyBaseService[WorkBookingsORM]):
             end_at=end_at,
         )
         return WorkBookingResponseSchem.model_validate(new_booking)
+
+    async def delete_work_booking(self) -> None:
+        pass
 
     @staticmethod
     def _time_calculation(

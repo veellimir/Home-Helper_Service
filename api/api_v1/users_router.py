@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 
+from app.authentication.dependencies.current_user import CurrentUserDep
 from app.users.infrastructure.schemes import (
     CreateQuestionnaireSchem,
     UpdateUserSchem,
@@ -29,37 +30,36 @@ async def get_users_list(
     return await service.get_users_list(session=session)
 
 
-@router.get("/{user_id}", summary="Получить пользователя по ID")
-async def get_user_by_id(
+@router.get("/current-user", summary="Получить информацию по текущему пользователю")
+async def get_current_user(
     session: DBSessionDep,
     service: UsersServiceDep,
-    user_id: int,
+    user: CurrentUserDep,
 ) -> UserResponseSchem | None:
     """
     Возвращает подробную информацию по текущему пользователю
 
     :user_id идентификатор пользователя
     """
-    return await service.get_user_by_id(session=session, user_id=user_id)
+    return await service.get_user_by_id(session=session, user_id=user.id)
 
 
-@router.post("/{user_id}", summary="Создание анкеты")
+@router.post("/create", summary="Создание анкеты")
 async def create_questionnaire(
     session: DBSessionDep,
     service: UsersServiceDep,
-    user_id: int,
     data: CreateQuestionnaireSchem,
+    user: CurrentUserDep,
 ) -> UserResponseSchem | None:
     """
     Создает анкету для текущего пользователя
 
-    :user_id Идентификатор текущего пользователя \n
     :first_name Имя пользователя \n
     :last_name Фамилия пользователя \n
     :age Возраст
     """
     return await service.create_questionnaire(
-        session=session, user_id=user_id, data_questionnaire=data
+        session=session, user_id=user.id, data_questionnaire=data
     )
 
 
@@ -83,11 +83,11 @@ async def patch_role_user_by_id(
     )
 
 
-@router.patch("/{user_id}", summary="Обновление анкеты")
+@router.patch("/update", summary="Обновление анкеты")
 async def patch_user_with_questionnaire(
     session: DBSessionDep,
     service: UsersServiceDep,
-    user_id: int,
+    user: CurrentUserDep,
     data: UpdateUserSchem,
 ) -> UserResponseSchem | None:
     """
@@ -99,21 +99,20 @@ async def patch_user_with_questionnaire(
     :age Возраст
     """
     return await service.patch_user_by_id_with_questionnaire(
-        session=session, user_id=user_id, data_questionnaire=data
+        session=session, user_id=user.id, data_questionnaire=data
     )
 
 
-@router.delete("/{user_id}", summary="Удаление пользователя и анкеты")
+@router.delete("/delete", summary="Удаление пользователя и анкеты")
 async def delete_user_with_questionnaire(
     session: DBSessionDep,
     service: UsersServiceDep,
-    user_id: int,
+    user: CurrentUserDep,
 ) -> None:
     """
     Удаляет анкету текущего пользователя
 
-    :user_id идентификатор пользователя
     """
     await service.delete_user_with_questionnaire(
-        session=session, user_id=user_id
+        session=session, user_id=user.id
     )

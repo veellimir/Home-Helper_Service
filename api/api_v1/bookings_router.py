@@ -1,9 +1,10 @@
 from fastapi import APIRouter
 
+from app.authentication.dependencies.current_user import CurrentUserDep
 from app.bookings.infrastructure.schemes import (
     CreateWorkBookingSchem,
     WorkBookingListShem,
-    WorkBookingResponseSchem,
+    WorkBookingResponseSchem, DeleteWorkBookingSchem,
 )
 from core.config import settings
 from dependecies.annotations import DBSessionDep, WorkBookingServiceDep
@@ -29,14 +30,34 @@ async def create_work_booking(
     session: DBSessionDep,
     service: WorkBookingServiceDep,
     data: CreateWorkBookingSchem,
+    user: CurrentUserDep,
 ) -> WorkBookingResponseSchem:
     """
     Создает вызов мастера по свободной дате и времени и выбранной работы.
 
-    :user_id Уникальное идентификатор пользователя \n
     :work_id Уникальный идентификатор выбранной работы \n
     :input_time Желаемое время заказчика (формат: 2026-09-20T16:00:00)
     """
     return await service.create_work_booking(
-        session=session, booking_data=data
+        session=session, booking_data=data, user_id=user.id
+    )
+
+
+@router.delete("/delete", summary="Отменить вызов мастера")
+async def delete_work_booking(
+    session: DBSessionDep,
+    service: WorkBookingServiceDep,
+    data: DeleteWorkBookingSchem,
+    user: CurrentUserDep,
+) -> None:
+    """
+    Маршрут в разработке !!
+
+    Удаляет вызов мастера если запись существует.
+
+    :work_id Уникальный идентификатор выбранной работы \n
+    :input_time Текущее время вызова (формат: 2026-09-20T16:00:00)
+    """
+    return await service.delete_work_booking(
+        session=session,
     )

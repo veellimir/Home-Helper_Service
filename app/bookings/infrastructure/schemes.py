@@ -32,6 +32,9 @@ class WorkBookingListShem(BaseSchem):
 
 
 class CreateWorkBookingSchem(BaseSchem):
-    user_id: int
     work_id: int
     input_time: CustomDate
+
+
+class DeleteWorkBookingSchem(CreateWorkBookingSchem):
+    user_id: int
