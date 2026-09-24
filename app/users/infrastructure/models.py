@@ -55,6 +55,10 @@ class QuestionnaireORM(BaseORM):
 
     first_name: Mapped[str] = mapped_column(String(30))
     last_name: Mapped[str] = mapped_column(String(30))
+    phone: Mapped[str] = mapped_column(String(12), nullable=True, unique=True)
+    address: Mapped[str | None] = mapped_column(
+        String(256), nullable=True, unique=True
+    )
     age: Mapped[int | None] = mapped_column(Integer, nullable=False)
 
     user_id: Mapped[int] = mapped_column(
