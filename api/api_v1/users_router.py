@@ -30,7 +30,9 @@ async def get_users_list(
     return await service.get_users_list(session=session)
 
 
-@router.get("/current-user", summary="Получить информацию по текущему пользователю")
+@router.get(
+    "/current-user", summary="Получить информацию по текущему пользователю"
+)
 async def get_current_user(
     session: DBSessionDep,
     service: UsersServiceDep,

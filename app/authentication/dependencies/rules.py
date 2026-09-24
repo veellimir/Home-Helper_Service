@@ -8,7 +8,6 @@ ACCESS_RULES: dict[tuple[str, str], UserRoleEnum | AccessLevel] = {
     ("POST", "/api/v1/auth/forgot-password"): AccessLevel.AUTHENTICATED,
     ("POST", "/api/v1/auth/reset-password"): AccessLevel.AUTHENTICATED,
     ("POST", "/api/v1/auth/logout"): AccessLevel.AUTHENTICATED,
-
     # USERS
     ("GET", "/api/v1/users/list"): UserRoleEnum.ADMIN,
     ("GET", "/api/v1/users/current-user"): AccessLevel.AUTHENTICATED,
@@ -16,12 +15,10 @@ ACCESS_RULES: dict[tuple[str, str], UserRoleEnum | AccessLevel] = {
     ("PATCH", "/api/v1/users/update"): UserRoleEnum.CLIENT,
     ("PATCH", "/api/v1/users/update-role/{user_id}"): UserRoleEnum.ADMIN,
     ("DELETE", "/api/v1/users/delete"): AccessLevel.AUTHENTICATED,
-
     # SERVICE
     ("PATCH", "/api/v1/works/{work_id}"): UserRoleEnum.ADMIN,
     ("DELETE", "/api/v1/works/{work_id}"): UserRoleEnum.ADMIN,
     ("POST", "/api/v1/works/create"): UserRoleEnum.ADMIN,
-
     # BOOKING SERVICE
     ("POST", "/api/v1/work-bookings/create"): UserRoleEnum.CLIENT,
 }

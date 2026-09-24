@@ -47,7 +47,10 @@ class WorkBookingService(SQLAlchemyBaseService[WorkBookingsORM]):
         ]
 
     async def create_work_booking(
-        self, session: AsyncSession, booking_data: CreateWorkBookingSchem, user_id: int
+        self,
+        session: AsyncSession,
+        booking_data: CreateWorkBookingSchem,
+        user_id: int,
     ) -> None:
         current_work: (
             WorkResponseSchem | None

@@ -4,7 +4,7 @@ from app.authentication.dependencies.current_user import CurrentUserDep
 from app.bookings.infrastructure.schemes import (
     CreateWorkBookingSchem,
     WorkBookingListShem,
-    WorkBookingResponseSchem, DeleteWorkBookingSchem,
+    WorkBookingResponseSchem,
 )
 from core.config import settings
 from dependecies.annotations import DBSessionDep, WorkBookingServiceDep
@@ -29,8 +29,8 @@ async def get_list_work_bookings(
 async def create_work_booking(
     session: DBSessionDep,
     service: WorkBookingServiceDep,
-    data: CreateWorkBookingSchem,
     user: CurrentUserDep,
+    data: CreateWorkBookingSchem,
 ) -> WorkBookingResponseSchem:
     """
     Создает вызов мастера по свободной дате и времени и выбранной работы.
@@ -47,8 +47,8 @@ async def create_work_booking(
 async def delete_work_booking(
     session: DBSessionDep,
     service: WorkBookingServiceDep,
-    data: DeleteWorkBookingSchem,
-    user: CurrentUserDep,
+    # user: CurrentUserDep,
+    # data: DeleteWorkBookingSchem,
 ) -> None:
     """
     Маршрут в разработке !!
