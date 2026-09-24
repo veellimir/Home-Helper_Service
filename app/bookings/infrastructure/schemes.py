@@ -1,5 +1,6 @@
 from pydantic import computed_field
 
+from app.users.infrastructure.schemes import UserResponseSchem, QuestionnaireResponseSchem
 from core.infrastructure.schemas import BaseResponseSchem, BaseSchem
 from core.infrastructure.typing import CustomDate
 
@@ -29,6 +30,10 @@ class WorkBookingListShem(BaseSchem):
             "воскресенье",
         )
         return days[self.start_at.weekday()]
+
+
+class WorkBookingDetailListShem(WorkBookingListShem):
+    questionnaire: QuestionnaireResponseSchem
 
 
 class CreateWorkBookingSchem(BaseSchem):

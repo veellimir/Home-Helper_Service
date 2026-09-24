@@ -4,7 +4,7 @@ from app.authentication.dependencies.current_user import CurrentUserDep
 from app.bookings.infrastructure.schemes import (
     CreateWorkBookingSchem,
     WorkBookingListShem,
-    WorkBookingResponseSchem,
+    WorkBookingResponseSchem, WorkBookingDetailListShem,
 )
 from core.config import settings
 from dependecies.annotations import DBSessionDep, WorkBookingServiceDep
@@ -23,6 +23,19 @@ async def get_list_work_bookings(
     :params None
     """
     return await service.get_list_work_bookings(session=session)
+
+
+@router.get("/list-detail", summary="Получить вызовы пользователей")
+async def get_list_work_bookings(
+    session: DBSessionDep,
+    service: WorkBookingServiceDep,
+) -> list[WorkBookingDetailListShem]:
+    """
+    Получает забронированных дней пользователей.
+
+    :params None
+    """
+    return await service.get_list_detail_work_bookings(session=session)
 
 
 @router.post("/create", summary="Добавить запись по вызову мастера")
