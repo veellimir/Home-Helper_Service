@@ -26,13 +26,13 @@ async def get_list_work_bookings(
     return await service.get_list_work_bookings(session=session)
 
 
-@router.get("/list-detail", summary="Получить вызовы пользователей")
+@router.get("/list-detail", summary="Получить все вызовы пользователей")
 async def get_list_detail_work_bookings(
     session: DBSessionDep,
     service: WorkBookingServiceDep,
 ) -> list[WorkBookingDetailListShem]:
     """
-    Получает забронированных дней пользователей.
+    Получает список вызовов пользователей.
 
     :params None
     """

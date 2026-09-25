@@ -38,7 +38,7 @@ class WorkBookingService(SQLAlchemyBaseService[WorkBookingsORM]):
         self,
         session: AsyncSession,
     ) -> list[WorkBookingListShem]:
-        bookings: WorkBookingService = await self.dao.get_list_work_bookings(
+        bookings: WorkBookingsORM = await self.dao.get_list_work_bookings(
             session=session
         )
 
@@ -51,7 +51,7 @@ class WorkBookingService(SQLAlchemyBaseService[WorkBookingsORM]):
         self,
         session: AsyncSession,
     ) -> list[WorkBookingDetailListShem]:
-        bookings: WorkBookingService = (
+        bookings: WorkBookingsORM = (
             await self.dao.get_list_detail_work_bookings(session=session)
         )
 

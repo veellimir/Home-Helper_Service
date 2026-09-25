@@ -37,7 +37,7 @@ class WorkBookingDAO(SQLAlchemyBaseDAO):
     async def get_list_detail_work_bookings(
         self,
         session: AsyncSession,
-    ) -> list[WorkBookingsORM]:
+    ) -> WorkBookingsORM:
         stmt = (
             select(self.model)
             .options(joinedload(self.model.questionnaire))
