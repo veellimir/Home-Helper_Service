@@ -21,3 +21,11 @@ class BookingTimeConflictException(HTTPException):
                 "пожалуйста выберите любое доступное время с 8:00 до 20:00"
             ),
         )
+
+
+class BookingNotFoundException(HTTPException):
+    def __init__(self) -> None:
+        super().__init__(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Выбранные работы не найдены",
+        )

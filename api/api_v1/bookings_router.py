@@ -3,6 +3,7 @@ from fastapi import APIRouter
 from app.authentication.dependencies.current_user import CurrentUserDep
 from app.bookings.infrastructure.schemes import (
     CreateWorkBookingSchem,
+    DeleteWorkBookingSchem,
     WorkBookingDetailListShem,
     WorkBookingListShem,
     WorkBookingResponseSchem,
@@ -49,9 +50,13 @@ async def create_work_booking(
     """
     Создает вызов мастера по свободной дате и времени и выбранной работы.
 
+    В будущем будет приходить уведомление по SSE
+
     :work_id Уникальный идентификатор выбранной работы \n
     :input_time Желаемое время заказчика (формат: 2026-09-20T16:00:00)
     """
+
+    # TODO: Добавить уведомление по SSE
     return await service.create_work_booking(
         session=session, booking_data=data, user_id=user.id
     )
@@ -61,17 +66,18 @@ async def create_work_booking(
 async def delete_work_booking(
     session: DBSessionDep,
     service: WorkBookingServiceDep,
-    # user: CurrentUserDep,
-    # data: DeleteWorkBookingSchem,
+    user: CurrentUserDep,
+    data: DeleteWorkBookingSchem,
 ) -> None:
     """
-    Маршрут в разработке !!
-
     Удаляет вызов мастера если запись существует.
 
-    :work_id Уникальный идентификатор выбранной работы \n
-    :input_time Текущее время вызова (формат: 2026-09-20T16:00:00)
+    В будущем будет приходить уведомление по SSE
+
+    :work_booking_id Уникальный идентификатор выбранной работы \n
     """
+
+    # TODO: Добавить уведомление по SSE
     return await service.delete_work_booking(
-        session=session,
+        session=session, user_id=user.id, booking_data=data
     )

@@ -47,6 +47,13 @@ class WorkBookingDAO(SQLAlchemyBaseDAO):
         result = await session.execute(stmt)
         return result.scalars().all()
 
+    async def get_work_booking_by_id(
+        self, session: AsyncSession, work_booking_id: int
+    ) -> WorkBookingsORM | None:
+        stmt = select(self.model).where(self.model.id == work_booking_id)
+        result = await session.execute(stmt)
+        return result.scalar_one_or_none()
+
     async def create_booking(
         self,
         session: AsyncSession,
@@ -66,3 +73,9 @@ class WorkBookingDAO(SQLAlchemyBaseDAO):
         await session.flush()
 
         return new_booking
+
+    async def delete_work_booking(
+        self, session: AsyncSession, current_booking: WorkBookingsORM
+    ) -> None:
+        await session.delete(current_booking)
+        await session.flush()

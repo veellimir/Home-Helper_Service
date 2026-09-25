@@ -3,6 +3,7 @@ from datetime import datetime, time, timedelta
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.bookings.domain.exceptions import (
+    BookingNotFoundException,
     BookingTimeConflictException,
     WorkBookingConflictException,
 )
@@ -10,6 +11,7 @@ from app.bookings.infrastructure.dao import WorkBookingDAO
 from app.bookings.infrastructure.models import WorkBookingsORM
 from app.bookings.infrastructure.schemes import (
     CreateWorkBookingSchem,
+    DeleteWorkBookingSchem,
     WorkBookingDetailListShem,
     WorkBookingListShem,
     WorkBookingResponseSchem,
@@ -105,8 +107,26 @@ class WorkBookingService(SQLAlchemyBaseService[WorkBookingsORM]):
         )
         return WorkBookingResponseSchem.model_validate(new_booking)
 
-    async def delete_work_booking(self) -> None:
-        pass
+    async def delete_work_booking(
+        self,
+        session: AsyncSession,
+        user_id: int,
+        booking_data: DeleteWorkBookingSchem,
+    ) -> None:
+        await self.users_service.get_user_by_id(
+            session=session, user_id=user_id
+        )
+        current_booking: (
+            WorkBookingsORM | None
+        ) = await self.dao.get_work_booking_by_id(
+            session=session, work_booking_id=booking_data.work_booking_id
+        )
+        if not current_booking:
+            raise BookingNotFoundException
+
+        await self.dao.delete_work_booking(
+            session=session, current_booking=current_booking
+        )
 
     @staticmethod
     def _time_calculation(

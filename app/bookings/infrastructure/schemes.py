@@ -41,5 +41,5 @@ class CreateWorkBookingSchem(BaseSchem):
     input_time: CustomDate
 
 
-class DeleteWorkBookingSchem(CreateWorkBookingSchem):
-    user_id: int
+class DeleteWorkBookingSchem(BaseSchem):
+    work_booking_id: int
