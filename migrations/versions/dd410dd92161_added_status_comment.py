@@ -18,26 +18,59 @@ depends_on: str | Sequence[str] | None = None
 
 
 def upgrade() -> None:
+    status_enum = sa.Enum(
+        "WAITING",
+        "ACCEPTED",
+        "EDITING",
+        "CANCELLED",
+        name="statusbookingenum",
+    )
+
+    status_enum.create(op.get_bind(), checkfirst=True)
+
     op.add_column(
         "work_bookings",
         sa.Column(
             "status",
-            sa.Enum(
-                "WAITING",
-                "ACCEPTED",
-                "EDITING",
-                "CANCELLED",
-                name="statusbookingenum",
-            ),
-            nullable=False,
+            status_enum,
+            nullable=True,
         ),
     )
+
+    op.execute(
+        """
+        UPDATE work_bookings
+        SET status = 'WAITING'
+        WHERE status IS NULL
+        """
+    )
+
+    op.alter_column(
+        "work_bookings",
+        "status",
+        nullable=False,
+    )
+
     op.add_column(
         "work_bookings",
-        sa.Column("comment", sa.String(length=256), nullable=True),
+        sa.Column(
+            "comment",
+            sa.String(length=256),
+            nullable=True,
+        ),
     )
 
 
 def downgrade() -> None:
     op.drop_column("work_bookings", "comment")
     op.drop_column("work_bookings", "status")
+
+    status_enum = sa.Enum(
+        "WAITING",
+        "ACCEPTED",
+        "EDITING",
+        "CANCELLED",
+        name="statusbookingenum",
+    )
+
+    status_enum.drop(op.get_bind(), checkfirst=True)
