@@ -16,6 +16,8 @@ from app.bookings.infrastructure.schemes import (
     WorkBookingListShem,
     WorkBookingResponseSchem,
 )
+from app.sse.dataclass import WorkBookingEvent
+from app.sse.publisher import EventPublisher
 from app.users.domain.exceptions import QuestionnaireNotFoundException
 from app.users.domain.service import UsersService
 from app.users.infrastructure.schemes import UserResponseSchem
@@ -30,10 +32,12 @@ class WorkBookingService(SQLAlchemyBaseService[WorkBookingsORM]):
         dao: WorkBookingDAO,
         works_service: WorksService,
         users_service: UsersService,
+        event_publisher: EventPublisher,
     ) -> None:
         self.dao = dao
         self.works_service = works_service
         self.users_service = users_service
+        self.event_publisher = event_publisher
         super().__init__(self.dao)
 
     async def get_list_work_bookings(
@@ -105,7 +109,14 @@ class WorkBookingService(SQLAlchemyBaseService[WorkBookingsORM]):
             start_at=booking_data.input_time,
             end_at=end_at,
         )
-        return WorkBookingResponseSchem.model_validate(new_booking)
+        booking = WorkBookingResponseSchem.model_validate(new_booking)
+        await self.event_publisher.publish_work_booking_create(
+            WorkBookingEvent(
+                booking_id=booking.id,
+                user_id=user_id,
+            )
+        )
+        return new_booking
 
     async def delete_work_booking(
         self,
@@ -126,6 +137,12 @@ class WorkBookingService(SQLAlchemyBaseService[WorkBookingsORM]):
 
         await self.dao.delete_work_booking(
             session=session, current_booking=current_booking
+        )
+        await self.event_publisher.publish_work_booking_deleted(
+            WorkBookingEvent(
+                booking_id=current_booking.id,
+                user_id=user_id,
+            )
         )
 
     @staticmethod

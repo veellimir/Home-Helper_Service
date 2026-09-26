@@ -4,6 +4,8 @@ from app.authentication.domain.service import AuthService
 from app.authentication.infrastructure.dao import AuthDAO
 from app.bookings.domain.service import WorkBookingService
 from app.bookings.infrastructure.dao import WorkBookingDAO
+from app.sse.manager import sse_manager
+from app.sse.publisher import EventPublisher
 from app.users.domain.service import UsersService
 from app.users.infrastructure.dao import UsersDAO
 from app.works.domain.service import WorksService
@@ -17,6 +19,11 @@ def init_service(app: FastAPI) -> None:
     works_dao = WorksDAO()
     work_booking_dao = WorkBookingDAO()
 
+    # Notifications
+    event_publisher = EventPublisher(
+        sse_manager=sse_manager,
+    )
+
     # Services
     auth_service = AuthService(auth_dao)
     users_service = UsersService(users_dao)
@@ -25,6 +32,7 @@ def init_service(app: FastAPI) -> None:
         dao=work_booking_dao,
         works_service=works_service,
         users_service=users_service,
+        event_publisher=event_publisher
     )
 
     # State

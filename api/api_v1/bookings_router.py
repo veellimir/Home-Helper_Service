@@ -56,7 +56,6 @@ async def create_work_booking(
     :input_time Желаемое время заказчика (формат: 2026-09-20T16:00:00)
     """
 
-    # TODO: Добавить уведомление по SSE
     return await service.create_work_booking(
         session=session, booking_data=data, user_id=user.id
     )
@@ -77,7 +76,6 @@ async def delete_work_booking(
     :work_booking_id Уникальный идентификатор выбранной работы \n
     """
 
-    # TODO: Добавить уведомление по SSE
     return await service.delete_work_booking(
         session=session, user_id=user.id, booking_data=data
     )
