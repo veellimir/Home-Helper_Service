@@ -12,6 +12,7 @@ from app.bookings.infrastructure.models import WorkBookingsORM
 from app.bookings.infrastructure.schemes import (
     CreateWorkBookingSchem,
     DeleteWorkBookingSchem,
+    UpdateWorkBooking,
     WorkBookingDetailListShem,
     WorkBookingListShem,
     WorkBookingResponseSchem,
@@ -138,6 +139,27 @@ class WorkBookingService(SQLAlchemyBaseService[WorkBookingsORM]):
             )
         )
         return new_booking
+
+    async def update_status(
+        self,
+        session: AsyncSession,
+        booking_id: int,
+        booking_data: UpdateWorkBooking,
+    ) -> WorkBookingSchem | None:
+        current_booking: (
+            WorkBookingsORM | None
+        ) = await self.dao.get_work_booking_by_id(
+            session=session, work_booking_id=booking_id
+        )
+        if not current_booking:
+            raise BookingNotFoundException
+
+        update_booking = await self.dao.update_status(
+            session=session,
+            current_booking=current_booking,
+            booking_data=booking_data,
+        )
+        return WorkBookingSchem.model_validate(update_booking)
 
     async def delete_work_booking(
         self,

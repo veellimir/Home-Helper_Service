@@ -5,6 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
 from app.bookings.infrastructure.models import WorkBookingsORM
+from app.bookings.infrastructure.schemes import UpdateWorkBooking
 from core.infrastructure.dao import SQLAlchemyBaseDAO
 
 
@@ -73,6 +74,19 @@ class WorkBookingDAO(SQLAlchemyBaseDAO):
         await session.flush()
 
         return new_booking
+
+    async def update_status(
+        self,
+        session: AsyncSession,
+        current_booking: WorkBookingsORM,
+        booking_data: UpdateWorkBooking,
+    ) -> WorkBookingsORM:
+        if booking_data.status:
+            current_booking.comment = booking_data.comment
+        current_booking.status = booking_data.status
+
+        await session.flush()
+        return current_booking
 
     async def delete_work_booking(
         self, session: AsyncSession, current_booking: WorkBookingsORM

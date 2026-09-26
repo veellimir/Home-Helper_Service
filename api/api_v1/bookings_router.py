@@ -4,6 +4,7 @@ from app.authentication.dependencies.current_user import CurrentUserDep
 from app.bookings.infrastructure.schemes import (
     CreateWorkBookingSchem,
     DeleteWorkBookingSchem,
+    UpdateWorkBooking,
     WorkBookingDetailListShem,
     WorkBookingListShem,
     WorkBookingResponseSchem,
@@ -76,6 +77,20 @@ async def create_work_booking(
 
     return await service.create_work_booking(
         session=session, booking_data=data, user_id=user.id
+    )
+
+
+@router.patch(
+    "/update-status/{booking_id}", summary="Обновить статус вызова мастера"
+)
+async def update_status(
+    session: DBSessionDep,
+    service: WorkBookingServiceDep,
+    booking_id: int,
+    data: UpdateWorkBooking,
+) -> WorkBookingSchem | None:
+    return await service.update_status(
+        session=session, booking_id=booking_id, booking_data=data
     )
 
 

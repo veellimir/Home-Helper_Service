@@ -43,6 +43,11 @@ class WorkBookingDetailListShem(WorkBookingListShem):
     questionnaire: QuestionnaireResponseSchem
 
 
+class UpdateWorkBooking(BaseSchem):
+    status: StatusBookingEnum
+    comment: str | None = None
+
+
 class CreateWorkBookingSchem(BaseSchem):
     work_id: int
     input_time: CustomDate
