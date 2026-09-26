@@ -25,8 +25,7 @@ class WorkBookingsORM(BaseORM):
     )
 
     status: Mapped[StatusBookingEnum] = mapped_column(
-        nullable=False,
-        default=StatusBookingEnum.WAITING
+        nullable=False, default=StatusBookingEnum.WAITING
     )
     comment: Mapped[str | None] = mapped_column(String(256), nullable=True)
 

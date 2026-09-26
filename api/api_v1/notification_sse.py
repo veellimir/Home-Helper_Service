@@ -6,13 +6,13 @@ from app.sse.manager import sse_manager
 from app.users.domain.enums import UserRoleEnum
 from core.config import settings
 
+router = APIRouter(
+    prefix=settings.api.v1.notifications, tags=["Notifications"]
+)
 
-router = APIRouter(prefix=settings.api.v1.notifications, tags=["Notifications"])
 
 @router.get("/events", summary="Получение событий")
-async def events(
-    user: CurrentUserDep
-) -> StreamingResponse:
+async def events(user: CurrentUserDep) -> StreamingResponse:
     """
     Уведомления для администратора сервиса. \n
 
@@ -22,7 +22,7 @@ async def events(
     :return: Message
     """
     if user.role != UserRoleEnum.ADMIN:
-        return
+        return None
 
     return StreamingResponse(
         sse_manager.connect_admin(),

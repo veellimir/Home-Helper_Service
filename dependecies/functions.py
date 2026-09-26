@@ -32,7 +32,7 @@ def init_service(app: FastAPI) -> None:
         dao=work_booking_dao,
         works_service=works_service,
         users_service=users_service,
-        event_publisher=event_publisher
+        event_publisher=event_publisher,
     )
 
     # State
