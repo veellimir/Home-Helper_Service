@@ -1,6 +1,6 @@
 import json
 
-from app.sse.dataclass import WorkBookingDeletedEvent
+from app.sse.dataclass import WorkBookingEvent
 from app.sse.manager import SSEManager
 
 
@@ -13,7 +13,7 @@ class EventPublisher:
 
     async def publish_work_booking_deleted(
         self,
-        event: WorkBookingDeletedEvent,
+        event: WorkBookingEvent,
     ) -> None:
         payload = json.dumps(
             {
@@ -27,7 +27,7 @@ class EventPublisher:
 
     async def publish_work_booking_create(
         self,
-        event: WorkBookingDeletedEvent,
+        event: WorkBookingEvent,
     ) -> None:
         payload = json.dumps(
             {
