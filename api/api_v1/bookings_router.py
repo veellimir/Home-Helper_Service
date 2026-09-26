@@ -7,6 +7,7 @@ from app.bookings.infrastructure.schemes import (
     WorkBookingDetailListShem,
     WorkBookingListShem,
     WorkBookingResponseSchem,
+    WorkBookingSchem,
 )
 from core.config import settings
 from dependecies.annotations import DBSessionDep, WorkBookingServiceDep
@@ -38,6 +39,23 @@ async def get_list_detail_work_bookings(
     :params None
     """
     return await service.get_list_detail_work_bookings(session=session)
+
+
+@router.get("/{booking_id}", summary="Получить запись по ID")
+async def get_work_booking_by_id(
+    session: DBSessionDep,
+    service: WorkBookingServiceDep,
+    user: CurrentUserDep,
+    booking_id: int,
+) -> WorkBookingSchem | None:
+    """
+    Получает запись по ID только для текущего пользователя.
+
+    :params booking_id: int
+    """
+    return await service.get_work_booking_by_id(
+        session=session, work_booking_id=booking_id, user_id=user.id
+    )
 
 
 @router.post("/create", summary="Добавить запись по вызову мастера")

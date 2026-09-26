@@ -15,6 +15,7 @@ from app.bookings.infrastructure.schemes import (
     WorkBookingDetailListShem,
     WorkBookingListShem,
     WorkBookingResponseSchem,
+    WorkBookingSchem,
 )
 from app.sse.dataclass import WorkBookingEvent
 from app.sse.publisher import EventPublisher
@@ -23,6 +24,7 @@ from app.users.domain.service import UsersService
 from app.users.infrastructure.schemes import UserResponseSchem
 from app.works.domain.service import WorksService
 from app.works.infrastructure.schemes import WorkResponseSchem
+from core.domain.exceptions import RecordNotFoundException
 from core.domain.service import SQLAlchemyBaseService
 
 
@@ -65,6 +67,25 @@ class WorkBookingService(SQLAlchemyBaseService[WorkBookingsORM]):
             WorkBookingDetailListShem.model_validate(booking)
             for booking in bookings
         ]
+
+    async def get_work_booking_by_id(
+        self, session: AsyncSession, work_booking_id: int, user_id: int
+    ) -> WorkBookingSchem | None:
+        current_user: (
+            UserResponseSchem | None
+        ) = await self.users_service.get_user_by_id(
+            session=session, user_id=user_id
+        )
+        current_booking: (
+            WorkBookingsORM | None
+        ) = await self.dao.get_work_booking_by_id(
+            session=session, work_booking_id=work_booking_id
+        )
+
+        if current_booking.questionnaire_id != current_user.questionnaire.id:
+            raise RecordNotFoundException
+
+        return WorkBookingSchem.model_validate(current_booking)
 
     async def create_work_booking(
         self,

@@ -22,6 +22,5 @@ ACCESS_RULES: dict[tuple[str, str], UserRoleEnum | AccessLevel] = {
     # BOOKING SERVICE
     ("GET", "/api/v1/work-bookings/list"): AccessLevel.AUTHENTICATED,
     ("GET", "/api/v1/work-bookings/list-detail"): UserRoleEnum.ADMIN,
-    ("POST", "/api/v1/work-bookings/create"): UserRoleEnum.CLIENT,
     ("DELETE", "/api/v1/work-bookings/delete"): UserRoleEnum.CLIENT,
 }
