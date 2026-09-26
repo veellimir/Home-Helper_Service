@@ -1,8 +1,9 @@
 from typing import TYPE_CHECKING
 
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from app.bookings.domain.enums import StatusBookingEnum
 from app.users.infrastructure.models import QuestionnaireORM
 from core.infrastructure.models import BaseORM
 from core.infrastructure.typing import INPUT_USER_DATE
@@ -22,6 +23,12 @@ class WorkBookingsORM(BaseORM):
         ForeignKey("works.id", ondelete="CASCADE"),
         nullable=False,
     )
+
+    status: Mapped[StatusBookingEnum] = mapped_column(
+        nullable=False,
+        default=StatusBookingEnum.WAITING
+    )
+    comment: Mapped[str | None] = mapped_column(String(256), nullable=True)
 
     start_at: Mapped[INPUT_USER_DATE]
     end_at: Mapped[INPUT_USER_DATE]
