@@ -81,7 +81,7 @@ async def create_work_booking(
 
 
 @router.patch(
-    "/update-status/{booking_id}", summary="Обновить статус вызова мастера"
+    "/update/{booking_id}", summary="Обновить статус вызова мастера"
 )
 async def update_status(
     session: DBSessionDep,
@@ -89,6 +89,12 @@ async def update_status(
     booking_id: int,
     data: UpdateWorkBooking,
 ) -> WorkBookingSchem | None:
+    """
+     Обновляет статус и добавляет комментарий(опционально).
+
+    :booking_id  Уникальный идентификатор выбранной записи \n
+    :status [waiting, accepted, editing, cancelled]
+    """
     return await service.update_status(
         session=session, booking_id=booking_id, booking_data=data
     )
